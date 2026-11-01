@@ -1,0 +1,181 @@
+version: "3.9"
+
+# ============================================================
+# Smart Climate Engine – Monorepo Docker Compose
+# ============================================================
+
+name: smart-climate-engine
+
+services:
+  # ----------------------------------------------------------
+  # PostgreSQL + PostGIS  (spatial database)
+  # ----------------------------------------------------------
+  db:
+    image: postgis/postgis:16-3.4-alpine
+    container_name: sce-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-climate_db}
+      POSTGRES_USER: ${POSTGRES_USER:-climate_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-climate_pass}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-climate_user} -d ${POSTGRES_DB:-climate_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sce-network
+
+  # ----------------------------------------------------------
+  # Redis  (cache / task queue)
+  # ----------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: sce-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_pass}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD:-redis_pass}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sce-network
+
+  # ----------------------------------------------------------
+  # ML Service  (Python · FastAPI · AI Decision Engine)
+  # ----------------------------------------------------------
+  ml-service:
+    build:
+      context: ./apps/ml-service
+      dockerfile: Dockerfile
+      target: development
+    container_name: sce-ml-service
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-climate_user}:${POSTGRES_PASSWORD:-climate_pass}@db:5432/${POSTGRES_DB:-climate_db}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_pass}@redis:6379/0
+      APP_ENV: ${APP_ENV:-development}
+    ports:
+      - "${ML_SERVICE_PORT:-8000}:8000"
+    volumes:
+      - ./apps/ml-service:/app:cached
+      - ml_venv:/app/.venv
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - sce-network
+
+  # ----------------------------------------------------------
+  # API Gateway  (Node.js · Express · TypeScript)
+  # ----------------------------------------------------------
+  api-express:
+    build:
+      context: ./apps/api-express
+      dockerfile: Dockerfile
+      target: development
+    container_name: sce-api-express
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      HOSTNAME: "0.0.0.0"
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-climate_user}:${POSTGRES_PASSWORD:-climate_pass}@db:5432/${POSTGRES_DB:-climate_db}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_pass}@redis:6379/0
+      ML_SERVICE_URL: http://ml-service:8000
+      CORS_ORIGINS: http://localhost:${WEB_PORT:-3000}
+    ports:
+      - "${API_PORT:-4000}:4000"
+    volumes:
+      - ./apps/api-express:/app:cached
+      - api_node_modules:/app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - sce-network
+
+  # ----------------------------------------------------------
+  # Web App  (Next.js · React · Mapbox · Recharts)
+  # ----------------------------------------------------------
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      target: development
+    container_name: sce-web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      HOSTNAME: "0.0.0.0"
+      NEXT_PUBLIC_API_URL: http://localhost:${API_PORT:-4000}
+      NEXT_PUBLIC_ML_SERVICE_URL: http://localhost:${ML_SERVICE_PORT:-8000}
+      NEXT_PUBLIC_APP_NAME: "Smart Climate Engine"
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    volumes:
+      - ./apps/web:/app:cached
+      - web_node_modules:/app/node_modules
+      - web_next_cache:/app/.next
+    depends_on:
+      api-express:
+        condition: service_healthy
+    networks:
+      - sce-network
+
+# ============================================================
+# Named Volumes
+# ============================================================
+volumes:
+  postgres_data:
+    name: sce-postgres-data
+  redis_data:
+    name: sce-redis-data
+  ml_venv:
+    name: sce-ml-venv
+  api_node_modules:
+    name: sce-api-node-modules
+  web_node_modules:
+    name: sce-web-node-modules
+  web_next_cache:
+    name: sce-web-next-cache
+
+# ============================================================
+# Networks
+# ============================================================
+networks:
+  sce-network:
+    name: sce-network
+    driver: bridge
