@@ -32,7 +32,7 @@ Traditional tools operate in silos:
 
 ## ⚡ The Hidden Trade-Off Problem
 
-Single-issue fixes create unintended consequences across connected systems.
+Single-issue fixes create unintended consequences across connected systems
 
 ### Real-World Example – Conventional Heavy Drainage Response:
 ```
