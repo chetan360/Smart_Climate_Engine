@@ -116,20 +116,20 @@ export default function Home() {
       </main>
 
       {/* Clean Municipal Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-xs text-slate-500 mt-12">
+      <footer className="border-t border-slate-800 bg-slate-950 py-7 text-sm text-slate-400 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-2">
-            <div className="w-5 h-5 rounded bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400">
-              <ShieldCheck className="w-3.5 h-3.5" />
+          <div className="flex items-center space-x-2.5">
+            <div className="w-6 h-6 rounded-lg bg-emerald-950 border border-emerald-700 flex items-center justify-center text-emerald-400">
+              <ShieldCheck className="w-4 h-4" />
             </div>
-            <span className="text-slate-300 font-semibold">Smart Climate Engine</span>
-            <span>· National Climate Resilience Decision Intelligence Platform</span>
+            <span className="text-slate-200 font-semibold text-sm sm:text-base">Smart Climate Engine</span>
+            <span className="text-xs sm:text-sm text-slate-400">· Decision Intelligence Platform</span>
           </div>
 
-          <div className="text-center md:text-right text-slate-400 text-[11px]">
-            <span>Express API Gateway (Port 4000) · Python ML Simulation Engine · PostGIS Spatial DB</span>
-            <div className="text-slate-500 mt-0.5">
-              Multi-Objective Pareto Optimization · Multi-Hazard Municipal Planning
+          <div className="text-center md:text-right text-xs sm:text-sm text-slate-400">
+            <span>Express API Gateway (Port 4000) · Python ML Simulation Engine · PostGIS Database</span>
+            <div className="text-slate-400 mt-1">
+              Multi-Objective Pareto Optimization · Municipal Climate Planning
             </div>
           </div>
         </div>

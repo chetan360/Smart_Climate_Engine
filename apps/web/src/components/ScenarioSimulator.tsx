@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sliders, RefreshCw, Check, ArrowRight, Info } from "lucide-react";
+import { Sliders, RefreshCw, Check, ArrowRight } from "lucide-react";
 import { climateApi } from "../lib/api";
 import type { RegionInfo } from "../lib/types";
 
@@ -20,7 +20,7 @@ export function ScenarioSimulator({
   const [budget, setBudget] = useState<number>(50);
   const [targetMonths, setTargetMonths] = useState<number>(14);
 
-  // Objective weights (must sum up or represent priority scale)
+  // Objective weights
   const [floodWeight, setFloodWeight] = useState<number>(40);
   const [gwWeight, setGwWeight] = useState<number>(30);
   const [heatWeight, setHeatWeight] = useState<number>(20);
@@ -63,13 +63,45 @@ export function ScenarioSimulator({
     ],
   });
 
-  // Keep in sync with navbar region
   useEffect(() => {
     setRegionName(selectedRegion);
   }, [selectedRegion]);
 
   const toggleIntervention = (key: string) => {
     setInterventions((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const applySpongePreset = () => {
+    setInterventions({
+      wetland: true,
+      permeable: true,
+      bioswales: true,
+      smart_drainage: true,
+      concrete_canal: false,
+      rainwater_wells: true,
+    });
+  };
+
+  const applyDrainagePreset = () => {
+    setInterventions({
+      wetland: false,
+      permeable: false,
+      bioswales: false,
+      smart_drainage: true,
+      concrete_canal: true,
+      rainwater_wells: false,
+    });
+  };
+
+  const applyAllPreset = () => {
+    setInterventions({
+      wetland: true,
+      permeable: true,
+      bioswales: true,
+      smart_drainage: true,
+      concrete_canal: true,
+      rainwater_wells: true,
+    });
   };
 
   const runSimulation = async () => {
@@ -84,7 +116,6 @@ export function ScenarioSimulator({
     if (interventions.rainwater_wells) activeInterventions.push("rainwater_harvesting");
 
     try {
-      // Call Express API gateway
       const res = await climateApi.simulateCustom({
         name: `Custom Simulation for ${regionName}`,
         region: regionName,
@@ -134,26 +165,26 @@ export function ScenarioSimulator({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-lg p-5">
+      {/* Header Banner */}
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-base font-semibold text-slate-100 flex items-center space-x-2">
-              <Sliders className="w-4 h-4 text-emerald-400" />
-              <span>Multi-Hazard Climate Intervention Simulator</span>
+            <h1 className="text-lg sm:text-xl font-bold text-slate-100 flex items-center space-x-2.5">
+              <Sliders className="w-5 h-5 text-emerald-400" />
+              <span>Multi-Hazard Climate Scenario Simulator</span>
             </h1>
-            <p className="text-xs text-slate-400 mt-1 max-w-3xl">
-              Model cross-system consequences before committing municipal capital. Test combinations of nature-based sponge infrastructure, smart drainage telemetry, and conventional civil canalization across any municipality.
+            <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+              Test combinations of nature-based sponge zones, permeable pavements, smart telemetry, and traditional civil culverts before committing municipal capital.
             </p>
           </div>
-          <div className="flex items-center space-x-2">
+          <div>
             <button
               onClick={runSimulation}
               disabled={isSimulating}
-              className="px-3.5 py-2 rounded bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 text-xs font-semibold flex items-center space-x-1.5 transition-colors cursor-pointer"
+              className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 text-sm font-bold flex items-center space-x-2 transition-colors cursor-pointer shadow-sm"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isSimulating ? "animate-spin" : ""}`} />
-              <span>{isSimulating ? "Simulating via Express..." : "Run Simulation"}</span>
+              <RefreshCw className={`w-4 h-4 ${isSimulating ? "animate-spin" : ""}`} />
+              <span>{isSimulating ? "Simulating..." : "Recalculate Results"}</span>
             </button>
           </div>
         </div>
@@ -163,29 +194,29 @@ export function ScenarioSimulator({
         {/* Controls Column */}
         <div className="lg:col-span-2 space-y-6">
           {/* Target Municipality & Fiscal Budget Inputs */}
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-4">
-            <h2 className="text-sm font-semibold text-slate-200">Municipal Scope & Capital Envelope</h2>
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
+            <h2 className="text-base font-bold text-slate-100">Municipal Scope & Capital Budget</h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Municipality / Target Region
+                <label className="block text-sm font-semibold text-slate-300 mb-1.5">
+                  Target City / Region
                 </label>
                 <input
                   type="text"
                   value={regionName}
                   onChange={(e) => setRegionName(e.target.value)}
-                  placeholder="Enter city or district name..."
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                  placeholder="Enter municipality or district name..."
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs font-medium text-slate-300">
-                    Authorized Budget Envelope
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="text-sm font-semibold text-slate-300">
+                    Capital Budget Limit
                   </label>
-                  <span className="text-xs font-mono font-bold text-emerald-400">
+                  <span className="text-base font-mono font-bold text-emerald-400">
                     Rs. {budget} Crore
                   </span>
                 </div>
@@ -197,7 +228,7 @@ export function ScenarioSimulator({
                     step="5"
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value))}
-                    className="flex-1 h-2 bg-slate-800 rounded appearance-none cursor-pointer accent-emerald-500"
+                    className="flex-1 h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <input
                     type="number"
@@ -205,7 +236,7 @@ export function ScenarioSimulator({
                     max="300"
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value) || 10)}
-                    className="w-16 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-emerald-400 font-mono text-right"
+                    className="w-20 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-sm text-emerald-400 font-mono font-bold text-right"
                   />
                 </div>
               </div>
@@ -213,85 +244,106 @@ export function ScenarioSimulator({
           </div>
 
           {/* Intervention Portfolio Checklist */}
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-4">
-            <div>
-              <h2 className="text-sm font-semibold text-slate-200">Intervention Portfolio Selection</h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Toggle specific interventions to simulate their composite hydrological, environmental, and budgetary impacts.
-              </p>
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h2 className="text-base sm:text-lg font-bold text-slate-100">Intervention Portfolio Selection</h2>
+                <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                  Select interventions or pick a preset package to calculate cross-hazard performance.
+                </p>
+              </div>
+
+              {/* 1-Click Preset Buttons */}
+              <div className="flex items-center space-x-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={applySpongePreset}
+                  className="px-3 py-1.5 rounded-lg bg-emerald-950/70 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                >
+                  🍃 Sponge City Preset
+                </button>
+                <button
+                  type="button"
+                  onClick={applyDrainagePreset}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                >
+                  🏗️ Canal Preset
+                </button>
+                <button
+                  type="button"
+                  onClick={applyAllPreset}
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 text-xs transition-colors cursor-pointer"
+                >
+                  All
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
               {[
                 {
                   key: "wetland",
                   label: "Wetland & Riparian Sponge Zones",
                   cost: "Rs. 18 Cr",
-                  impact: "High infiltration (+40% aquifer), natural flood attenuation",
-                  type: "Nature-Based",
+                  impact: "High natural absorption (+40% aquifer), attenuates flood surge",
                 },
                 {
                   key: "permeable",
                   label: "Permeable Pavements & Porous Roads",
                   cost: "Rs. 10 Cr",
-                  impact: "Absorbs street runoff at source, cools surface heat",
-                  type: "Nature-Based",
+                  impact: "Absorbs street runoff at source, mitigates urban surface heat",
                 },
                 {
                   key: "bioswales",
                   label: "Roadside Vegetated Bioswales",
                   cost: "Rs. 5 Cr",
-                  impact: "Bio-filters stormwater and captures localized waterlogging",
-                  type: "Nature-Based",
+                  impact: "Bio-filters stormwater and captures localized road waterlogging",
                 },
                 {
                   key: "rainwater_wells",
                   label: "Rainwater Infiltration Aquifer Wells",
                   cost: "Rs. 4 Cr",
-                  impact: "Direct aquifer recharge during monsoon cloudbursts",
-                  type: "Nature-Based",
+                  impact: "Directly recharges depleted aquifers during heavy downpours",
                 },
                 {
                   key: "smart_drainage",
-                  label: "Smart IoT Culvert & Drain Telemetry",
+                  label: "Smart IoT Culvert Telemetry",
                   cost: "Rs. 7 Cr",
-                  impact: "Predictive choke alerts and automated silt monitoring",
-                  type: "Telemetry",
+                  impact: "Early flood warnings and automated silt choke alerts",
                 },
                 {
                   key: "concrete_canal",
                   label: "Heavy Concrete Storm Canalization",
                   cost: "Rs. 25 Cr",
-                  impact: "Rapid evacuation; blocks aquifer recharge (-15%)",
-                  type: "Civil Engineering",
+                  impact: "Flushes surface runoff rapidly; impairs groundwater table (-15%)",
                 },
               ].map((item) => (
                 <div
                   key={item.key}
                   onClick={() => toggleIntervention(item.key)}
-                  className={`p-3 rounded border cursor-pointer transition-colors ${
+                  className={`p-4 rounded-xl border cursor-pointer transition-all ${
                     interventions[item.key]
-                      ? "bg-slate-950 border-emerald-500/60 text-slate-100"
+                      ? "bg-slate-950 border-emerald-500/80 text-slate-100 ring-1 ring-emerald-500/30"
                       : "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700"
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-start space-x-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start space-x-3">
                       <div
-                        className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center border text-[10px] shrink-0 ${
+                        className={`w-5 h-5 rounded mt-0.5 flex items-center justify-center border text-xs shrink-0 ${
                           interventions[item.key]
                             ? "bg-emerald-600 border-emerald-500 text-slate-950"
                             : "border-slate-600 bg-slate-900"
                         }`}
                       >
-                        {interventions[item.key] && <Check className="w-3 h-3 stroke-[3]" />}
+                        {interventions[item.key] && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
                       <div>
-                        <div className="font-medium text-slate-200">{item.label}</div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{item.impact}</div>
+                        <div className="text-sm sm:text-base font-semibold text-slate-100">{item.label}</div>
+                        <div className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">{item.impact}</div>
                       </div>
                     </div>
-                    <span className="text-[11px] font-mono text-emerald-400 whitespace-nowrap">
+                    <span className="text-sm font-mono font-bold text-emerald-400 whitespace-nowrap">
                       {item.cost}
                     </span>
                   </div>
@@ -301,102 +353,123 @@ export function ScenarioSimulator({
           </div>
 
           {/* Objective Prioritization Weights */}
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-3">
-            <h2 className="text-sm font-semibold text-slate-200">Stakeholder Priority Balancing</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
+            <h2 className="text-base font-bold text-slate-100">Municipal Priority Balancing</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
               <div>
-                <label className="text-slate-400 block mb-1">Flood Containment</label>
+                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                  Flood Safety
+                </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
                   value={floodWeight}
                   onChange={(e) => setFloodWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-slate-400 block mb-1">Aquifer Recharge</label>
+                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                  Aquifer Recharge
+                </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
                   value={gwWeight}
                   onChange={(e) => setGwWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-slate-400 block mb-1">Heat Island Mitigation</label>
+                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                  Urban Heat Relief
+                </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
                   value={heatWeight}
                   onChange={(e) => setHeatWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-slate-400 block mb-1">Cost Efficiency</label>
+                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                  Cost Efficiency
+                </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
                   value={costWeight}
                   onChange={(e) => setCostWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
                 />
               </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-800 flex justify-end">
+              <button
+                type="button"
+                onClick={runSimulation}
+                disabled={isSimulating}
+                className="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 text-sm sm:text-base font-bold flex items-center justify-center space-x-2 transition-colors cursor-pointer shadow-sm"
+              >
+                <RefreshCw className={`w-4 h-4 ${isSimulating ? "animate-spin" : ""}`} />
+                <span>{isSimulating ? "Running Simulation..." : "Simulate Scenario Impact"}</span>
+              </button>
             </div>
           </div>
         </div>
 
         {/* Results Column */}
         <div className="space-y-6">
-          {/* Simulation Output Card */}
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-5">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-6 shadow-sm">
             <div>
-              <div className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
-                Simulation Outcome ({regionName})
-              </div>
-              <h3 className="text-base font-semibold text-slate-100 mt-1">Multi-Objective Scorecard</h3>
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                Simulation Scorecard
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-slate-100 mt-1">
+                {regionName}
+              </h3>
             </div>
 
             {/* Composite Score Card */}
-            <div className="bg-slate-950 border border-slate-800 rounded p-4 text-center">
-              <span className="text-[11px] text-slate-400 uppercase tracking-wide">
-                Composite Resilience Index
+            <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 text-center">
+              <span className="text-xs text-slate-400 uppercase tracking-wider block font-medium">
+                Composite Resilience Score
               </span>
-              <div className="text-3xl font-extrabold text-emerald-400 font-mono my-1">
-                {simResults.resilience_index} <span className="text-xs text-slate-500 font-normal">/ 100</span>
+              <div className="text-4xl sm:text-5xl font-black text-emerald-400 font-mono my-2">
+                {simResults.resilience_index} <span className="text-base text-slate-500 font-normal">/ 100</span>
               </div>
-              <div className="text-[11px] text-slate-400">
-                Capex: <strong>Rs. {estimatedCostCr.toFixed(1)} Cr</strong> · Unallocated Headroom:{" "}
+              <div className="text-xs sm:text-sm text-slate-300 mt-2">
+                Capex: <strong className="text-slate-100">Rs. {estimatedCostCr.toFixed(1)} Cr</strong> · Headroom:{" "}
                 <strong className="text-emerald-400">Rs. {headroomCr.toFixed(1)} Cr</strong>
               </div>
             </div>
 
             {/* Quantitative Impact Bars */}
-            <div className="space-y-3.5 text-xs">
+            <div className="space-y-4 text-sm">
               <div>
-                <div className="flex justify-between mb-1">
-                  <span className="text-slate-300">Flood Risk Reduction</span>
-                  <span className="font-bold text-emerald-400">
+                <div className="flex justify-between items-center mb-1.5">
+                  <span className="text-slate-300 font-medium">Flood Risk Mitigation</span>
+                  <span className="font-bold text-emerald-400 font-mono">
                     +{simResults.flood_risk_reduction_percentage}%
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
                   <div
-                    className="bg-emerald-500 h-1.5 rounded transition-all duration-300"
+                    className="bg-emerald-500 h-2.5 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(100, simResults.flood_risk_reduction_percentage)}%` }}
                   />
                 </div>
               </div>
 
               <div>
-                <div className="flex justify-between mb-1">
-                  <span className="text-slate-300">Groundwater Infiltration</span>
+                <div className="flex justify-between items-center mb-1.5">
+                  <span className="text-slate-300 font-medium">Aquifer Recharge Gain</span>
                   <span
                     className={`font-bold font-mono ${
                       simResults.groundwater_recharge_benefit_percentage >= 0
@@ -409,9 +482,9 @@ export function ScenarioSimulator({
                       : `${simResults.groundwater_recharge_benefit_percentage}%`}
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
                   <div
-                    className={`h-1.5 rounded transition-all duration-300 ${
+                    className={`h-2.5 rounded-full transition-all duration-300 ${
                       simResults.groundwater_recharge_benefit_percentage >= 0
                         ? "bg-cyan-500"
                         : "bg-rose-500"
@@ -427,15 +500,15 @@ export function ScenarioSimulator({
               </div>
 
               <div>
-                <div className="flex justify-between mb-1">
-                  <span className="text-slate-300">Urban Heat Island Cooling</span>
+                <div className="flex justify-between items-center mb-1.5">
+                  <span className="text-slate-300 font-medium">Urban Heat Island Cooling</span>
                   <span className="font-bold font-mono text-amber-300">
                     -{simResults.urban_heat_reduction_percentage}°C
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
                   <div
-                    className="bg-amber-500 h-1.5 rounded transition-all duration-300"
+                    className="bg-amber-500 h-2.5 rounded-full transition-all duration-300"
                     style={{
                       width: `${Math.min(100, simResults.urban_heat_reduction_percentage * 50)}%`,
                     }}
@@ -444,15 +517,15 @@ export function ScenarioSimulator({
               </div>
 
               <div>
-                <div className="flex justify-between mb-1">
-                  <span className="text-slate-300">Environmental Co-Benefit Score</span>
+                <div className="flex justify-between items-center mb-1.5">
+                  <span className="text-slate-300 font-medium">Environmental Score</span>
                   <span className="font-bold font-mono text-emerald-400">
-                    {simResults.environmental_impact_score}/100
+                    {simResults.environmental_impact_score} / 100
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
                   <div
-                    className="bg-emerald-400 h-1.5 rounded transition-all duration-300"
+                    className="bg-emerald-400 h-2.5 rounded-full transition-all duration-300"
                     style={{ width: `${simResults.environmental_impact_score}%` }}
                   />
                 </div>
@@ -460,27 +533,27 @@ export function ScenarioSimulator({
             </div>
 
             {/* Strategic Notes */}
-            <div className="pt-3 border-t border-slate-800 space-y-2 text-xs">
-              <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide block">
-                Trade-Off Reasoning
+            <div className="pt-4 border-t border-slate-800 space-y-2 text-xs sm:text-sm">
+              <span className="font-semibold text-slate-300 uppercase tracking-wider text-xs block mb-1">
+                Summary of Trade-Offs
               </span>
-              <ul className="space-y-1 text-slate-400 text-[11px]">
+              <ul className="space-y-1.5 text-slate-300">
                 {simResults.advantages.map((adv, i) => (
-                  <li key={i} className="flex items-start space-x-1.5">
-                    <span className="text-emerald-400 font-bold">✓</span>
-                    <span>{adv}</span>
+                  <li key={i} className="flex items-start space-x-2">
+                    <span className="text-emerald-400 font-bold text-sm">✓</span>
+                    <span className="leading-relaxed">{adv}</span>
                   </li>
                 ))}
                 {simResults.tradeoffs.map((tr, i) => (
-                  <li key={i} className="flex items-start space-x-1.5">
-                    <span className="text-amber-400 font-bold">•</span>
-                    <span>{tr}</span>
+                  <li key={i} className="flex items-start space-x-2">
+                    <span className="text-amber-400 font-bold text-sm">•</span>
+                    <span className="leading-relaxed">{tr}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Quick Action to Chat */}
+            {/* Action Link to Chat */}
             {onNavigateToChat && (
               <button
                 onClick={() =>
@@ -488,10 +561,10 @@ export function ScenarioSimulator({
                     `Evaluate simulated package for ${regionName} with Rs. ${budget} Cr budget and ${simResults.flood_risk_reduction_percentage}% flood containment.`
                   )
                 }
-                className="w-full py-2 px-3 rounded bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-medium border border-slate-700 flex items-center justify-center space-x-1 transition-colors"
+                className="w-full py-3 px-4 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-200 text-sm font-semibold border border-slate-700 flex items-center justify-center space-x-2 transition-colors cursor-pointer"
               >
                 <span>Ask AI Assistant About this Result</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             )}
           </div>
