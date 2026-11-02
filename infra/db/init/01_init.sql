@@ -55,14 +55,14 @@ CREATE TABLE IF NOT EXISTS decisions.recommendations (
     created_at   TIMESTAMPTZ DEFAULT now()
 );
 
--- ---- SEED DATA (Pune & Pimpri-Chinchwad Region · PCCOE Case Study) ----
+-- ---- SEED DATA (Pune & Pimpri-Chinchwad Urban Region) ----
 
 INSERT INTO environmental.data_points (source, variable, value, unit, location, recorded_at) VALUES
 -- Rainfall sensors
 ('IMD Shivajinagar Station', 'rainfall', 82.5, 'mm/day', ST_SetSRID(ST_MakePoint(73.8567, 18.5204), 4326), NOW() - INTERVAL '3 days'),
 ('PCMC Nigdi Weather Station', 'rainfall', 125.0, 'mm/day', ST_SetSRID(ST_MakePoint(73.7997, 18.6530), 4326), NOW() - INTERVAL '2 days'),
 ('Hinjawadi IT Park Sensor', 'rainfall', 96.2, 'mm/day', ST_SetSRID(ST_MakePoint(73.7299, 18.5913), 4326), NOW() - INTERVAL '1 day'),
-('PCCOE Akurdi Campus Station', 'rainfall', 145.7, 'mm/day', ST_SetSRID(ST_MakePoint(73.7709, 18.6448), 4326), NOW()),
+('Akurdi North Weather Station', 'rainfall', 145.7, 'mm/day', ST_SetSRID(ST_MakePoint(73.7709, 18.6448), 4326), NOW()),
 
 -- River & Drainage Water Levels (Mula, Mutha, Pavana)
 ('Pavana River Dapodi Gauge', 'water_level', 4.4, 'meters', ST_SetSRID(ST_MakePoint(73.8320, 18.5830), 4326), NOW()),

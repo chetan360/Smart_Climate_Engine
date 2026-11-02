@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Smart Climate Engine – AI Decision Intelligence Platform",
-  description: "AI-powered Climate Resilience Decision Intelligence Platform by Team Climate Bandits · PCCOE International Grand Challenge 2026. Fusing environmental data, scenario simulations, and Nugen AI reasoning.",
+  description: "AI-powered Climate Resilience Decision Intelligence Platform. Fusing environmental data, scenario simulations, and multi-hazard AI decision reasoning.",
 };
 
 export default function RootLayout({

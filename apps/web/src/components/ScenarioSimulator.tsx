@@ -1,11 +1,26 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sliders, RefreshCw, Check, Zap, DollarSign, Droplets, Sun, Activity, Sparkles } from "lucide-react";
+import { Sliders, RefreshCw, Check, ArrowRight, Info } from "lucide-react";
 import { climateApi } from "../lib/api";
+import type { RegionInfo } from "../lib/types";
 
-export function ScenarioSimulator() {
+interface ScenarioSimulatorProps {
+  selectedRegion: string;
+  regions: RegionInfo[];
+  onNavigateToChat?: (query: string) => void;
+}
+
+export function ScenarioSimulator({
+  selectedRegion,
+  regions,
+  onNavigateToChat,
+}: ScenarioSimulatorProps) {
+  const [regionName, setRegionName] = useState<string>(selectedRegion);
   const [budget, setBudget] = useState<number>(50);
+  const [targetMonths, setTargetMonths] = useState<number>(14);
+
+  // Objective weights (must sum up or represent priority scale)
   const [floodWeight, setFloodWeight] = useState<number>(40);
   const [gwWeight, setGwWeight] = useState<number>(30);
   const [heatWeight, setHeatWeight] = useState<number>(20);
@@ -29,6 +44,8 @@ export function ScenarioSimulator() {
     estimated_cost: number;
     implementation_time_months: number;
     resilience_index: number;
+    advantages: string[];
+    tradeoffs: string[];
   }>({
     flood_risk_reduction_percentage: 79,
     groundwater_recharge_benefit_percentage: 65,
@@ -37,72 +54,72 @@ export function ScenarioSimulator() {
     estimated_cost: 350000000,
     implementation_time_months: 14,
     resilience_index: 88,
+    advantages: [
+      "Optimal balance across flood containment, aquifer recharge, and urban cooling",
+      "Conserves municipal budget headroom compared to concrete culvert widening",
+    ],
+    tradeoffs: [
+      "Requires multi-department execution across Stormwater and Parks branches",
+    ],
   });
+
+  // Keep in sync with navbar region
+  useEffect(() => {
+    setRegionName(selectedRegion);
+  }, [selectedRegion]);
+
+  const toggleIntervention = (key: string) => {
+    setInterventions((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const runSimulation = async () => {
     setIsSimulating(true);
+
+    const activeInterventions: string[] = [];
+    if (interventions.wetland) activeInterventions.push("wetland_restoration");
+    if (interventions.permeable) activeInterventions.push("permeable_pavement");
+    if (interventions.bioswales) activeInterventions.push("bioswales");
+    if (interventions.smart_drainage) activeInterventions.push("drainage_maintenance");
+    if (interventions.concrete_canal) activeInterventions.push("drainage_expansion");
+    if (interventions.rainwater_wells) activeInterventions.push("rainwater_harvesting");
+
     try {
-      // Calculate active intervention contribution
-      let costSum = 0;
-      let floodScore = 0;
-      let gwScore = 0;
-      let heatScore = 0;
-
-      if (interventions.wetland) {
-        costSum += 18;
-        floodScore += 35;
-        gwScore += 40;
-        heatScore += 0.8;
-      }
-      if (interventions.permeable) {
-        costSum += 10;
-        floodScore += 20;
-        gwScore += 25;
-        heatScore += 0.5;
-      }
-      if (interventions.bioswales) {
-        costSum += 5;
-        floodScore += 12;
-        gwScore += 10;
-        heatScore += 0.3;
-      }
-      if (interventions.smart_drainage) {
-        costSum += 7;
-        floodScore += 18;
-        gwScore += 5;
-        heatScore += 0.1;
-      }
-      if (interventions.concrete_canal) {
-        costSum += 25;
-        floodScore += 30;
-        gwScore -= 20; // reduces recharge
-        heatScore -= 0.2;
-      }
-      if (interventions.rainwater_wells) {
-        costSum += 4;
-        floodScore += 8;
-        gwScore += 15;
-        heatScore += 0.1;
-      }
-
-      // Cap with budget
-      const finalCost = Math.min(budget, costSum);
-      const scale = costSum > 0 ? Math.min(1.0, budget / costSum) : 0;
-      const res = await climateApi.simulateCustom(finalCost, {
-        flood: floodWeight / 100,
-        gw: gwWeight / 100,
-        heat: heatWeight / 100,
+      // Call Express API gateway
+      const res = await climateApi.simulateCustom({
+        name: `Custom Simulation for ${regionName}`,
+        region: regionName,
+        budget: budget,
+        interventions: activeInterventions,
+        priorities: {
+          resilience: floodWeight / 100,
+          groundwater: gwWeight / 100,
+          heat: heatWeight / 100,
+          cost: costWeight / 100,
+        },
       });
 
-      setSimResults({
-        flood_risk_reduction_percentage: Math.min(96, Math.round(floodScore * scale)),
-        groundwater_recharge_benefit_percentage: Math.round(gwScore * scale),
-        urban_heat_reduction_percentage: parseFloat((heatScore * scale).toFixed(1)),
-        environmental_impact_score: Math.min(98, Math.round(70 + (gwScore > 0 ? 20 : -10))),
-        estimated_cost: finalCost * 10000000,
-        implementation_time_months: Math.max(6, Math.round(costSum * 0.4)),
-        resilience_index: Math.min(99, Math.round((floodScore * 0.45 + Math.max(0, gwScore) * 0.35 + 20) * scale)),
-      });
+      const sim = (res as any).data || res;
+      const r = sim.simulation_results || sim;
+      if (r && r.flood_risk_reduction_percentage !== undefined) {
+        setSimResults({
+          flood_risk_reduction_percentage: r.flood_risk_reduction_percentage,
+          groundwater_recharge_benefit_percentage: r.groundwater_recharge_benefit_percentage,
+          urban_heat_reduction_percentage: r.urban_heat_reduction_percentage,
+          environmental_impact_score: r.environmental_impact_score,
+          estimated_cost: r.estimated_cost,
+          implementation_time_months: r.implementation_time_months || targetMonths,
+          resilience_index: r.resilience_index || 85,
+          advantages: sim.advantages || [
+            `Achieves ${r.flood_risk_reduction_percentage}% flood containment`,
+            `Generates ${r.groundwater_recharge_benefit_percentage}% aquifer recharge`,
+          ],
+          tradeoffs: sim.tradeoffs || [
+            `Allocates estimated Rs. ${(r.estimated_cost / 10000000).toFixed(1)} Cr`,
+          ],
+        });
+      }
+    } catch (err) {
+      console.warn("Simulation call via Express:", err);
     } finally {
       setIsSimulating(false);
     }
@@ -110,132 +127,268 @@ export function ScenarioSimulator() {
 
   useEffect(() => {
     runSimulation();
-  }, [budget, interventions]);
+  }, [budget, interventions, regionName]);
 
-  const toggleIntervention = (key: string) => {
-    setInterventions((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  const estimatedCostCr = simResults.estimated_cost / 10000000;
+  const headroomCr = Math.max(0, budget - estimatedCostCr);
 
   return (
     <div className="space-y-6">
-      {/* Title Card */}
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
-        <div className="flex items-center space-x-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-          <Sliders className="w-4 h-4" />
-          <span>Testable "What-If" Simulation Sandbox</span>
+      {/* Header */}
+      <div className="bg-slate-900 border border-slate-800 rounded-lg p-5">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-base font-semibold text-slate-100 flex items-center space-x-2">
+              <Sliders className="w-4 h-4 text-emerald-400" />
+              <span>Multi-Hazard Climate Intervention Simulator</span>
+            </h1>
+            <p className="text-xs text-slate-400 mt-1 max-w-3xl">
+              Model cross-system consequences before committing municipal capital. Test combinations of nature-based sponge infrastructure, smart drainage telemetry, and conventional civil canalization across any municipality.
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={runSimulation}
+              disabled={isSimulating}
+              className="px-3.5 py-2 rounded bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 text-xs font-semibold flex items-center space-x-1.5 transition-colors cursor-pointer"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isSimulating ? "animate-spin" : ""}`} />
+              <span>{isSimulating ? "Simulating via Express..." : "Run Simulation"}</span>
+            </button>
+          </div>
         </div>
-        <h2 className="text-xl font-bold text-white">Dynamic Municipal Intervention Simulator</h2>
-        <p className="text-slate-300 text-sm mt-1 max-w-3xl">
-          Simulate budget allocations, intervention packages, and stakeholder priority weightings before committing public capital. 
-          The multi-objective engine models cross-hazard consequences continuously.
-        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Controls Column */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Budget Slider */}
-          <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur-md space-y-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <label htmlFor="budget-slider" className="text-sm font-semibold text-white">Municipal Capital Budget</label>
-                <p className="text-xs text-slate-400">Total authorized capital expenditure envelope</p>
-              </div>
-              <span className="text-xl font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20">
-                ₹{budget} Crore
-              </span>
-            </div>
+          {/* Target Municipality & Fiscal Budget Inputs */}
+          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-4">
+            <h2 className="text-sm font-semibold text-slate-200">Municipal Scope & Capital Envelope</h2>
 
-            <input
-              id="budget-slider"
-              type="range"
-              min="10"
-              max="100"
-              step="5"
-              value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-            />
-            <div className="flex justify-between text-[11px] text-slate-500 font-mono">
-              <span>₹10 Cr (Pilot)</span>
-              <span>₹50 Cr (Pune Standard)</span>
-              <span>₹100 Cr (Metro-Scale)</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Municipality / Target Region
+                </label>
+                <input
+                  type="text"
+                  value={regionName}
+                  onChange={(e) => setRegionName(e.target.value)}
+                  placeholder="Enter city or district name..."
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-xs font-medium text-slate-300">
+                    Authorized Budget Envelope
+                  </label>
+                  <span className="text-xs font-mono font-bold text-emerald-400">
+                    Rs. {budget} Crore
+                  </span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="range"
+                    min="10"
+                    max="150"
+                    step="5"
+                    value={budget}
+                    onChange={(e) => setBudget(Number(e.target.value))}
+                    className="flex-1 h-2 bg-slate-800 rounded appearance-none cursor-pointer accent-emerald-500"
+                  />
+                  <input
+                    type="number"
+                    min="5"
+                    max="300"
+                    value={budget}
+                    onChange={(e) => setBudget(Number(e.target.value) || 10)}
+                    className="w-16 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-emerald-400 font-mono text-right"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Intervention Selection */}
-          <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur-md space-y-4">
-            <h3 className="text-sm font-semibold text-white">Intervention Component Portfolio</h3>
-            <p className="text-xs text-slate-400">Select combinations of nature-based and conventional engineering works</p>
+          {/* Intervention Portfolio Checklist */}
+          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-4">
+            <div>
+              <h2 className="text-sm font-semibold text-slate-200">Intervention Portfolio Selection</h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Toggle specific interventions to simulate their composite hydrological, environmental, and budgetary impacts.
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               {[
-                { key: "wetland", label: "Wetland & Riparian Sponge Zones", cost: "₹18 Cr", type: "Nature-Based" },
-                { key: "permeable", label: "Permeable Pavements & Porous Roads", cost: "₹10 Cr", type: "Nature-Based" },
-                { key: "bioswales", label: "Roadside Vegetated Bioswales", cost: "₹5 Cr", type: "Nature-Based" },
-                { key: "rainwater_wells", label: "Rainwater Infiltration Aquifer Wells", cost: "₹4 Cr", type: "Nature-Based" },
-                { key: "smart_drainage", label: "Smart IoT Drain De-silt Telemetry", cost: "₹7 Cr", type: "Smart Telemetry" },
-                { key: "concrete_canal", label: "Heavy Concrete Storm Canalization", cost: "₹25 Cr", type: "Conventional Civil" },
+                {
+                  key: "wetland",
+                  label: "Wetland & Riparian Sponge Zones",
+                  cost: "Rs. 18 Cr",
+                  impact: "High infiltration (+40% aquifer), natural flood attenuation",
+                  type: "Nature-Based",
+                },
+                {
+                  key: "permeable",
+                  label: "Permeable Pavements & Porous Roads",
+                  cost: "Rs. 10 Cr",
+                  impact: "Absorbs street runoff at source, cools surface heat",
+                  type: "Nature-Based",
+                },
+                {
+                  key: "bioswales",
+                  label: "Roadside Vegetated Bioswales",
+                  cost: "Rs. 5 Cr",
+                  impact: "Bio-filters stormwater and captures localized waterlogging",
+                  type: "Nature-Based",
+                },
+                {
+                  key: "rainwater_wells",
+                  label: "Rainwater Infiltration Aquifer Wells",
+                  cost: "Rs. 4 Cr",
+                  impact: "Direct aquifer recharge during monsoon cloudbursts",
+                  type: "Nature-Based",
+                },
+                {
+                  key: "smart_drainage",
+                  label: "Smart IoT Culvert & Drain Telemetry",
+                  cost: "Rs. 7 Cr",
+                  impact: "Predictive choke alerts and automated silt monitoring",
+                  type: "Telemetry",
+                },
+                {
+                  key: "concrete_canal",
+                  label: "Heavy Concrete Storm Canalization",
+                  cost: "Rs. 25 Cr",
+                  impact: "Rapid evacuation; blocks aquifer recharge (-15%)",
+                  type: "Civil Engineering",
+                },
               ].map((item) => (
                 <div
                   key={item.key}
                   onClick={() => toggleIntervention(item.key)}
-                  className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
+                  className={`p-3 rounded border cursor-pointer transition-colors ${
                     interventions[item.key]
-                      ? "bg-slate-900/90 border-emerald-500/50 text-white"
-                      : "bg-slate-950/40 border-white/5 text-slate-400 hover:border-white/15"
+                      ? "bg-slate-950 border-emerald-500/60 text-slate-100"
+                      : "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700"
                   }`}
                 >
-                  <div className="space-y-0.5">
-                    <div className="font-medium flex items-center gap-1.5">
-                      <span className={`w-3.5 h-3.5 rounded flex items-center justify-center border text-[9px] ${
-                        interventions[item.key] ? "bg-emerald-500 border-emerald-500 text-slate-950" : "border-slate-600"
-                      }`}>
-                        {interventions[item.key] && <Check className="w-2.5 h-2.5 stroke-[3]" />}
-                      </span>
-                      <span>{item.label}</span>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start space-x-2">
+                      <div
+                        className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center border text-[10px] shrink-0 ${
+                          interventions[item.key]
+                            ? "bg-emerald-600 border-emerald-500 text-slate-950"
+                            : "border-slate-600 bg-slate-900"
+                        }`}
+                      >
+                        {interventions[item.key] && <Check className="w-3 h-3 stroke-[3]" />}
+                      </div>
+                      <div>
+                        <div className="font-medium text-slate-200">{item.label}</div>
+                        <div className="text-[11px] text-slate-400 mt-0.5">{item.impact}</div>
+                      </div>
                     </div>
-                    <div className="text-[10px] text-slate-500">{item.type} · Est: {item.cost}</div>
+                    <span className="text-[11px] font-mono text-emerald-400 whitespace-nowrap">
+                      {item.cost}
+                    </span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Objective Prioritization Weights */}
+          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-3">
+            <h2 className="text-sm font-semibold text-slate-200">Stakeholder Priority Balancing</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+              <div>
+                <label className="text-slate-400 block mb-1">Flood Containment</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={floodWeight}
+                  onChange={(e) => setFloodWeight(Number(e.target.value) || 0)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 block mb-1">Aquifer Recharge</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={gwWeight}
+                  onChange={(e) => setGwWeight(Number(e.target.value) || 0)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 block mb-1">Heat Island Mitigation</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={heatWeight}
+                  onChange={(e) => setHeatWeight(Number(e.target.value) || 0)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 block mb-1">Cost Efficiency</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={costWeight}
+                  onChange={(e) => setCostWeight(Number(e.target.value) || 0)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-200 font-mono text-center"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Real-time Simulation Results Column */}
-        <div className="bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-emerald-500/30 rounded-2xl p-6 backdrop-blur-md flex flex-col justify-between space-y-6">
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" /> Simulated Outcome
-              </span>
-              {isSimulating && (
-                <RefreshCw className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
-              )}
+        {/* Results Column */}
+        <div className="space-y-6">
+          {/* Simulation Output Card */}
+          <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 space-y-5">
+            <div>
+              <div className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
+                Simulation Outcome ({regionName})
+              </div>
+              <h3 className="text-base font-semibold text-slate-100 mt-1">Multi-Objective Scorecard</h3>
             </div>
 
-            {/* Big Resilience Metric */}
-            <div className="bg-slate-950/60 border border-white/10 rounded-xl p-4 text-center mb-5">
-              <div className="text-xs text-slate-400">Composite Resilience Index</div>
-              <div className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 my-1">
-                {simResults.resilience_index} <span className="text-sm text-slate-500 font-normal">/ 100</span>
+            {/* Composite Score Card */}
+            <div className="bg-slate-950 border border-slate-800 rounded p-4 text-center">
+              <span className="text-[11px] text-slate-400 uppercase tracking-wide">
+                Composite Resilience Index
+              </span>
+              <div className="text-3xl font-extrabold text-emerald-400 font-mono my-1">
+                {simResults.resilience_index} <span className="text-xs text-slate-500 font-normal">/ 100</span>
               </div>
               <div className="text-[11px] text-slate-400">
-                Estimated Capital: ₹{(simResults.estimated_cost / 10000000).toFixed(1)} Cr · Budget Headroom: ₹{Math.max(0, budget - simResults.estimated_cost / 10000000).toFixed(1)} Cr
+                Capex: <strong>Rs. {estimatedCostCr.toFixed(1)} Cr</strong> · Unallocated Headroom:{" "}
+                <strong className="text-emerald-400">Rs. {headroomCr.toFixed(1)} Cr</strong>
               </div>
             </div>
 
-            {/* Performance Bars */}
-            <div className="space-y-4 text-xs">
+            {/* Quantitative Impact Bars */}
+            <div className="space-y-3.5 text-xs">
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-slate-300 flex items-center gap-1"><Droplets className="w-3.5 h-3.5 text-blue-400" /> Flood Runoff Reduction</span>
-                  <span className="font-bold text-emerald-400">+{simResults.flood_risk_reduction_percentage}%</span>
+                  <span className="text-slate-300">Flood Risk Reduction</span>
+                  <span className="font-bold text-emerald-400">
+                    +{simResults.flood_risk_reduction_percentage}%
+                  </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
                   <div
-                    className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
+                    className="bg-emerald-500 h-1.5 rounded transition-all duration-300"
                     style={{ width: `${Math.min(100, simResults.flood_risk_reduction_percentage)}%` }}
                   />
                 </div>
@@ -243,54 +396,105 @@ export function ScenarioSimulator() {
 
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-slate-300 flex items-center gap-1"><Zap className="w-3.5 h-3.5 text-cyan-400" /> Groundwater Recharge Gain</span>
-                  <span className={`font-bold ${simResults.groundwater_recharge_benefit_percentage >= 0 ? "text-cyan-400" : "text-rose-400"}`}>
-                    {simResults.groundwater_recharge_benefit_percentage >= 0 ? `+${simResults.groundwater_recharge_benefit_percentage}%` : `${simResults.groundwater_recharge_benefit_percentage}%`}
+                  <span className="text-slate-300">Groundwater Infiltration</span>
+                  <span
+                    className={`font-bold font-mono ${
+                      simResults.groundwater_recharge_benefit_percentage >= 0
+                        ? "text-cyan-400"
+                        : "text-rose-400"
+                    }`}
+                  >
+                    {simResults.groundwater_recharge_benefit_percentage >= 0
+                      ? `+${simResults.groundwater_recharge_benefit_percentage}%`
+                      : `${simResults.groundwater_recharge_benefit_percentage}%`}
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
                   <div
-                    className={`h-2 rounded-full transition-all duration-500 ${simResults.groundwater_recharge_benefit_percentage >= 0 ? "bg-cyan-500" : "bg-rose-500"}`}
-                    style={{ width: `${Math.max(5, Math.min(100, Math.abs(simResults.groundwater_recharge_benefit_percentage)))}%` }}
+                    className={`h-1.5 rounded transition-all duration-300 ${
+                      simResults.groundwater_recharge_benefit_percentage >= 0
+                        ? "bg-cyan-500"
+                        : "bg-rose-500"
+                    }`}
+                    style={{
+                      width: `${Math.max(
+                        5,
+                        Math.min(100, Math.abs(simResults.groundwater_recharge_benefit_percentage))
+                      )}%`,
+                    }}
                   />
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-slate-300 flex items-center gap-1"><Sun className="w-3.5 h-3.5 text-amber-400" /> Urban Heat Island Mitigation</span>
-                  <span className="font-bold text-amber-300">-{simResults.urban_heat_reduction_percentage}°C</span>
+                  <span className="text-slate-300">Urban Heat Island Cooling</span>
+                  <span className="font-bold font-mono text-amber-300">
+                    -{simResults.urban_heat_reduction_percentage}°C
+                  </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
                   <div
-                    className="bg-amber-500 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min(100, simResults.urban_heat_reduction_percentage * 50)}%` }}
+                    className="bg-amber-500 h-1.5 rounded transition-all duration-300"
+                    style={{
+                      width: `${Math.min(100, simResults.urban_heat_reduction_percentage * 50)}%`,
+                    }}
                   />
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-slate-300 flex items-center gap-1"><Activity className="w-3.5 h-3.5 text-emerald-400" /> Environmental Co-Benefit</span>
-                  <span className="font-bold text-emerald-300">{simResults.environmental_impact_score}/100</span>
+                  <span className="text-slate-300">Environmental Co-Benefit Score</span>
+                  <span className="font-bold font-mono text-emerald-400">
+                    {simResults.environmental_impact_score}/100
+                  </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-slate-800 rounded h-1.5 overflow-hidden">
                   <div
-                    className="bg-emerald-400 h-2 rounded-full transition-all duration-500"
+                    className="bg-emerald-400 h-1.5 rounded transition-all duration-300"
                     style={{ width: `${simResults.environmental_impact_score}%` }}
                   />
                 </div>
               </div>
             </div>
-          </div>
 
-          <button
-            onClick={runSimulation}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-white/10 flex items-center justify-center space-x-2 transition-all"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Re-compute Pareto Frontier</span>
-          </button>
+            {/* Strategic Notes */}
+            <div className="pt-3 border-t border-slate-800 space-y-2 text-xs">
+              <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide block">
+                Trade-Off Reasoning
+              </span>
+              <ul className="space-y-1 text-slate-400 text-[11px]">
+                {simResults.advantages.map((adv, i) => (
+                  <li key={i} className="flex items-start space-x-1.5">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>{adv}</span>
+                  </li>
+                ))}
+                {simResults.tradeoffs.map((tr, i) => (
+                  <li key={i} className="flex items-start space-x-1.5">
+                    <span className="text-amber-400 font-bold">•</span>
+                    <span>{tr}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Quick Action to Chat */}
+            {onNavigateToChat && (
+              <button
+                onClick={() =>
+                  onNavigateToChat(
+                    `Evaluate simulated package for ${regionName} with Rs. ${budget} Cr budget and ${simResults.flood_risk_reduction_percentage}% flood containment.`
+                  )
+                }
+                className="w-full py-2 px-3 rounded bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-medium border border-slate-700 flex items-center justify-center space-x-1 transition-colors"
+              >
+                <span>Ask AI Assistant About this Result</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

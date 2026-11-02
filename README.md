@@ -1,6 +1,6 @@
 # Smart Climate Engine 🌍⚡
 ### AI-Powered Climate Resilience Decision Intelligence Platform
-**Team Climate Bandits · PCCOE International Grand Challenge 2026 (Pune, India · Theme: AI for Climate Change)**
+**AI-Powered Decision Intelligence for Multi-Hazard Urban Climate Adaptation**
 
 [![Docker](https://img.shields.io/badge/Docker-Compose%20v2-blue?logo=docker&logoColor=white)](docker-compose.yml)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019-black?logo=next.js&logoColor=white)](apps/web)
@@ -211,15 +211,6 @@ Navigate to `http://localhost:3000`.
 
 ---
 
-## 👥 Team & Acknowledgements
+## 📄 License & Attribution
 
-**Team:** Climate Bandits  
-**Programme:** MCA 2026–2028, Pimpri Chinchwad College of Engineering (PCCOE), Pune  
-**Competition:** PCCOE International Grand Challenge 2026  
-**Theme:** AI for Climate Change  
-
-- **Srishti Sharma**
-- **Chetan Satish Mankar**
-- **Onkar Vinayak Dongare**
-
-*Antigravity-powered open source monorepo · Built for resilient cities and sustainable tomorrows.*
+Open source under the [MIT License](LICENSE). Built for resilient cities and sustainable tomorrows.

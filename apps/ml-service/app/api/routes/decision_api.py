@@ -14,12 +14,25 @@ from app.services.scenario_engine_service import ScenarioEngineService
 from app.services.optimization_service import OptimizationService
 from app.schemas.optimization import OptimizationRequest
 
+from app.services.chat_decision_service import (
+    ChatDecisionService,
+    ChatDecisionRequest,
+    ChatDecisionResponse,
+)
+from app.services.document_intelligence_service import (
+    DocumentIntelligenceService,
+    DocumentAnalysisRequest,
+    DocumentAnalysisResponse,
+)
+
 router = APIRouter(tags=["Decision Intelligence"])
 
 env_service = EnvironmentalDataService()
 risk_service = RiskAnalysisService()
 scenario_service = ScenarioEngineService()
 opt_service = OptimizationService()
+chat_service = ChatDecisionService()
+doc_service = DocumentIntelligenceService()
 
 
 class SimulateScenarioRequest(BaseModel):
@@ -233,3 +246,23 @@ def execute_full_decision_pipeline(req: FullPipelineRequest):
             f"delivering maximum multi-hazard resilience within the allocated budget."
         )
     }
+
+
+@router.post("/api/v1/decision/chat", response_model=ChatDecisionResponse)
+@router.post("/api/v1/chat", response_model=ChatDecisionResponse)
+def handle_decision_chat(payload: ChatDecisionRequest):
+    """
+    AI Decision Intelligence Chat endpoint.
+    Reasoning layer for municipal planning queries, cross-hazard trade-offs, and council resolution drafting.
+    """
+    return chat_service.process_chat_message(payload)
+
+
+@router.post("/internal/documents/analyze", response_model=DocumentAnalysisResponse)
+def analyze_uploaded_document(payload: DocumentAnalysisRequest):
+    """
+    Analyzes uploaded municipal environmental documents, spatial GeoJSON/KML layers,
+    and sensor telemetry CSVs.
+    """
+    return doc_service.analyze_document(payload)
+
