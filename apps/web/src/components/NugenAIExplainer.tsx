@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, ArrowRight, Brain, Send, CheckCircle2, Bot, SlidersHorizontal, RefreshCw } from "lucide-react";
+import { Sparkles, Brain, Send, CheckCircle2, Bot, RefreshCw } from "lucide-react";
 
 export function NugenAIExplainer() {
   const [query, setQuery] = useState(
@@ -77,13 +77,13 @@ export function NugenAIExplainer() {
   return (
     <div className="space-y-6">
       {/* Title */}
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
-        <div className="flex items-center space-x-2 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-1">
+      <div className="bg-notion-sidebar border border-notion-border rounded-2xl p-6">
+        <div className="flex items-center space-x-2 text-amber-500 text-xs font-semibold uppercase tracking-wider mb-1">
           <Brain className="w-4 h-4" />
           <span>Nugen AI Reasoning & Trade-off Engine</span>
         </div>
-        <h2 className="text-xl font-bold text-white">Continuous Climate Decision Intelligence Loop</h2>
-        <p className="text-slate-300 text-sm mt-1 max-w-3xl">
+        <h2 className="text-xl font-bold text-notion-text">Continuous Climate Decision Intelligence Loop</h2>
+        <p className="text-notion-secondary text-sm mt-1 max-w-3xl">
           Our physics models compute the numerical hydrologic estimates. Nugen AI contextualizes those numbers and domain constraints into plain-language municipal recommendations.
         </p>
       </div>
@@ -102,26 +102,26 @@ export function NugenAIExplainer() {
             key={s.step}
             className={`p-3 rounded-xl border flex flex-col justify-between ${
               s.active
-                ? "bg-slate-900 border-emerald-500/50 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-500/30"
-                : "bg-slate-950/40 border-white/5 text-slate-400"
+                ? "bg-notion-sidebar border-emerald-500 shadow-md ring-1 ring-emerald-500/30"
+                : "bg-notion-bg/40 border-notion-border text-notion-secondary"
             }`}
           >
             <div className="flex items-center justify-between text-[10px]">
-              <span className="font-mono text-slate-500">{s.step}</span>
-              {s.active && <Sparkles className="w-3 h-3 text-emerald-400" />}
+              <span className="font-mono text-notion-secondary">{s.step}</span>
+              {s.active && <Sparkles className="w-3 h-3 text-emerald-500" />}
             </div>
             <div className="mt-2">
-              <div className={`font-bold ${s.active ? "text-emerald-300" : "text-white"}`}>{s.name}</div>
-              <div className="text-[10px] text-slate-500">{s.desc}</div>
+              <div className={`font-bold ${s.active ? "text-emerald-500" : "text-notion-text"}`}>{s.name}</div>
+              <div className="text-[10px] text-notion-secondary">{s.desc}</div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Interactive Natural Language Prompt Studio */}
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 backdrop-blur-md space-y-4">
-        <label htmlFor="decision-query-input" className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-          <Bot className="w-4 h-4 text-cyan-400" /> Municipal Official Natural Language Inquiry
+      <div className="bg-notion-sidebar border border-notion-border rounded-2xl p-6 space-y-4">
+        <label htmlFor="decision-query-input" className="text-xs font-semibold text-notion-text flex items-center gap-1.5">
+          <Bot className="w-4 h-4 text-cyan-500" /> Municipal Official Natural Language Inquiry
         </label>
         <div className="flex flex-col sm:flex-row gap-3">
           <textarea
@@ -129,13 +129,13 @@ export function NugenAIExplainer() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             rows={2}
-            className="flex-1 bg-slate-950/80 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 resize-none"
+            className="flex-1 bg-notion-bg border border-notion-border rounded-xl p-3 text-xs sm:text-sm text-notion-text placeholder-notion-secondary focus:outline-none focus:border-cyan-500 resize-none"
             placeholder="Type your climate decision scenario or budget query..."
           />
           <button
             onClick={handleRunPipeline}
             disabled={isRunning}
-            className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center space-x-2 shrink-0 disabled:opacity-50"
+            className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center space-x-2 shrink-0 disabled:opacity-50"
           >
             {isRunning ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
@@ -148,37 +148,37 @@ export function NugenAIExplainer() {
       </div>
 
       {/* Nugen AI Reasoning Synthesis Output Card */}
-      <div className="bg-gradient-to-br from-slate-900/90 via-slate-950/90 to-emerald-950/30 border border-emerald-500/30 rounded-2xl p-6 backdrop-blur-md space-y-5">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+      <div className="bg-notion-sidebar border border-emerald-500/30 rounded-2xl p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-notion-border pb-4">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-emerald-400" />
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-emerald-500" />
             </div>
             <div>
-              <div className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+              <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">
                 {pipelineOutput.stage}
               </div>
-              <h3 className="text-base font-bold text-white">Nugen AI Strategic Decision Brief</h3>
+              <h3 className="text-base font-bold text-notion-text">Nugen AI Strategic Decision Brief</h3>
             </div>
           </div>
-          <span className="text-[11px] px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">
+          <span className="text-[11px] px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 font-mono">
             Confidence: 94.2%
           </span>
         </div>
 
-        <p className="text-sm text-slate-200 leading-relaxed font-sans bg-slate-950/40 p-4 rounded-xl border border-white/5">
+        <p className="text-sm text-notion-text leading-relaxed font-sans bg-notion-bg p-4 rounded-xl border border-notion-border">
           {pipelineOutput.reasoning}
         </p>
 
         {/* Hidden Trade-Offs Resolved */}
         <div className="space-y-2">
-          <h4 className="text-xs font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+          <h4 className="text-xs font-semibold text-cyan-500 uppercase tracking-wider flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5" /> Hidden Trade-Offs Overcome
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             {pipelineOutput.tradeoffsSolved.map((item, idx) => (
-              <div key={idx} className="bg-slate-950/50 border border-white/5 rounded-lg p-3 text-slate-300 flex items-start gap-2">
-                <span className="text-emerald-400 font-bold">✓</span>
+              <div key={idx} className="bg-notion-bg border border-notion-border rounded-lg p-3 text-notion-text flex items-start gap-2">
+                <span className="text-emerald-500 font-bold">✓</span>
                 <span>{item}</span>
               </div>
             ))}
@@ -186,9 +186,9 @@ export function NugenAIExplainer() {
         </div>
 
         {/* Long-term Consequence Projection */}
-        <div className="border-t border-white/5 pt-3 text-xs text-slate-400 flex items-center justify-between">
+        <div className="border-t border-notion-border pt-3 text-xs text-notion-secondary flex items-center justify-between">
           <span>{pipelineOutput.consequences}</span>
-          <span className="text-slate-500 font-mono text-[10px]">Decision Engine v1.0</span>
+          <span className="text-notion-secondary font-mono text-[10px]">Decision Engine v1.0</span>
         </div>
       </div>
     </div>

@@ -166,14 +166,14 @@ export function ScenarioSimulator({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm">
+      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-lg sm:text-xl font-bold text-slate-100 flex items-center space-x-2.5">
-              <Sliders className="w-5 h-5 text-emerald-400" />
+            <h1 className="text-lg sm:text-xl font-bold text-notion-text flex items-center space-x-2.5">
+              <Sliders className="w-5 h-5 text-emerald-500" />
               <span>Multi-Hazard Climate Scenario Simulator</span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+            <p className="text-sm text-notion-secondary mt-1 max-w-3xl leading-relaxed">
               Test combinations of nature-based sponge zones, permeable pavements, smart telemetry, and traditional civil culverts before committing municipal capital.
             </p>
           </div>
@@ -181,7 +181,7 @@ export function ScenarioSimulator({
             <button
               onClick={runSimulation}
               disabled={isSimulating}
-              className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 text-sm font-bold flex items-center space-x-2 transition-colors cursor-pointer shadow-sm"
+              className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm font-bold flex items-center space-x-2 transition-colors cursor-pointer shadow-sm"
             >
               <RefreshCw className={`w-4 h-4 ${isSimulating ? "animate-spin" : ""}`} />
               <span>{isSimulating ? "Simulating..." : "Recalculate Results"}</span>
@@ -194,12 +194,12 @@ export function ScenarioSimulator({
         {/* Controls Column */}
         <div className="lg:col-span-2 space-y-6">
           {/* Target Municipality & Fiscal Budget Inputs */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
-            <h2 className="text-base font-bold text-slate-100">Municipal Scope & Capital Budget</h2>
+          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
+            <h2 className="text-base font-bold text-notion-text">Municipal Scope & Capital Budget</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-1.5">
+                <label className="block text-sm font-semibold text-notion-text mb-1.5">
                   Target City / Region
                 </label>
                 <input
@@ -207,16 +207,16 @@ export function ScenarioSimulator({
                   value={regionName}
                   onChange={(e) => setRegionName(e.target.value)}
                   placeholder="Enter municipality or district name..."
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-notion-bg border border-notion-border rounded-lg px-3.5 py-2.5 text-sm text-notion-text placeholder-notion-secondary focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-sm font-semibold text-slate-300">
+                  <label className="text-sm font-semibold text-notion-text">
                     Capital Budget Limit
                   </label>
-                  <span className="text-base font-mono font-bold text-emerald-400">
+                  <span className="text-base font-mono font-bold text-emerald-500">
                     Rs. {budget} Crore
                   </span>
                 </div>
@@ -228,7 +228,7 @@ export function ScenarioSimulator({
                     step="5"
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value))}
-                    className="flex-1 h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                    className="flex-1 h-2.5 bg-notion-hover rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <input
                     type="number"
@@ -236,7 +236,7 @@ export function ScenarioSimulator({
                     max="300"
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value) || 10)}
-                    className="w-20 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-sm text-emerald-400 font-mono font-bold text-right"
+                    className="w-20 bg-notion-bg border border-notion-border rounded-lg px-2.5 py-1.5 text-sm text-emerald-500 font-mono font-bold text-right"
                   />
                 </div>
               </div>
@@ -244,11 +244,11 @@ export function ScenarioSimulator({
           </div>
 
           {/* Intervention Portfolio Checklist */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
+          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <h2 className="text-base sm:text-lg font-bold text-slate-100">Intervention Portfolio Selection</h2>
-                <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                <h2 className="text-base sm:text-lg font-bold text-notion-text">Intervention Portfolio Selection</h2>
+                <p className="text-xs sm:text-sm text-notion-secondary mt-0.5">
                   Select interventions or pick a preset package to calculate cross-hazard performance.
                 </p>
               </div>
@@ -258,21 +258,21 @@ export function ScenarioSimulator({
                 <button
                   type="button"
                   onClick={applySpongePreset}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-950/70 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
                 >
                   🍃 Sponge City Preset
                 </button>
                 <button
                   type="button"
                   onClick={applyDrainagePreset}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-notion-hover hover:bg-notion-border text-notion-text border border-notion-border text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
                 >
                   🏗️ Canal Preset
                 </button>
                 <button
                   type="button"
                   onClick={applyAllPreset}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 text-xs transition-colors cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-lg bg-notion-bg hover:bg-notion-hover text-notion-secondary border border-notion-border text-xs transition-colors cursor-pointer"
                 >
                   All
                 </button>
@@ -323,8 +323,8 @@ export function ScenarioSimulator({
                   onClick={() => toggleIntervention(item.key)}
                   className={`p-4 rounded-xl border cursor-pointer transition-all ${
                     interventions[item.key]
-                      ? "bg-slate-950 border-emerald-500/80 text-slate-100 ring-1 ring-emerald-500/30"
-                      : "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700"
+                      ? "bg-notion-bg border-emerald-500 text-notion-text ring-1 ring-emerald-500/30"
+                      : "bg-notion-bg/40 border-notion-border text-notion-secondary hover:border-notion-secondary"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -332,18 +332,18 @@ export function ScenarioSimulator({
                       <div
                         className={`w-5 h-5 rounded mt-0.5 flex items-center justify-center border text-xs shrink-0 ${
                           interventions[item.key]
-                            ? "bg-emerald-600 border-emerald-500 text-slate-950"
-                            : "border-slate-600 bg-slate-900"
+                            ? "bg-emerald-600 border-emerald-500 text-white"
+                            : "border-notion-border bg-notion-sidebar"
                         }`}
                       >
                         {interventions[item.key] && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
                       <div>
-                        <div className="text-sm sm:text-base font-semibold text-slate-100">{item.label}</div>
-                        <div className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">{item.impact}</div>
+                        <div className="text-sm sm:text-base font-semibold text-notion-text">{item.label}</div>
+                        <div className="text-xs sm:text-sm text-notion-secondary mt-1 leading-relaxed">{item.impact}</div>
                       </div>
                     </div>
-                    <span className="text-sm font-mono font-bold text-emerald-400 whitespace-nowrap">
+                    <span className="text-sm font-mono font-bold text-emerald-500 whitespace-nowrap">
                       {item.cost}
                     </span>
                   </div>
@@ -353,11 +353,11 @@ export function ScenarioSimulator({
           </div>
 
           {/* Objective Prioritization Weights */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
-            <h2 className="text-base font-bold text-slate-100">Municipal Priority Balancing</h2>
+          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-4 shadow-sm">
+            <h2 className="text-base font-bold text-notion-text">Municipal Priority Balancing</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
               <div>
-                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Flood Safety
                 </label>
                 <input
@@ -366,11 +366,11 @@ export function ScenarioSimulator({
                   max="100"
                   value={floodWeight}
                   onChange={(e) => setFloodWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
+                  className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Aquifer Recharge
                 </label>
                 <input
@@ -379,11 +379,11 @@ export function ScenarioSimulator({
                   max="100"
                   value={gwWeight}
                   onChange={(e) => setGwWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
+                  className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Urban Heat Relief
                 </label>
                 <input
@@ -392,11 +392,11 @@ export function ScenarioSimulator({
                   max="100"
                   value={heatWeight}
                   onChange={(e) => setHeatWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
+                  className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm text-slate-300 block mb-1.5 font-medium">
+                <label className="text-xs sm:text-sm text-notion-text block mb-1.5 font-medium">
                   Cost Efficiency
                 </label>
                 <input
@@ -405,17 +405,17 @@ export function ScenarioSimulator({
                   max="100"
                   value={costWeight}
                   onChange={(e) => setCostWeight(Number(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono text-center font-bold"
+                  className="w-full bg-notion-bg border border-notion-border rounded-lg px-3 py-2 text-sm text-notion-text font-mono text-center font-bold"
                 />
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-800 flex justify-end">
+            <div className="pt-3 border-t border-notion-border flex justify-end">
               <button
                 type="button"
                 onClick={runSimulation}
                 disabled={isSimulating}
-                className="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 text-sm sm:text-base font-bold flex items-center justify-center space-x-2 transition-colors cursor-pointer shadow-sm"
+                className="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm sm:text-base font-bold flex items-center justify-center space-x-2 transition-colors cursor-pointer shadow-sm"
               >
                 <RefreshCw className={`w-4 h-4 ${isSimulating ? "animate-spin" : ""}`} />
                 <span>{isSimulating ? "Running Simulation..." : "Simulate Scenario Impact"}</span>
@@ -426,27 +426,27 @@ export function ScenarioSimulator({
 
         {/* Results Column */}
         <div className="space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-6 shadow-sm">
+          <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-6 shadow-sm">
             <div>
-              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+              <span className="text-xs font-bold text-emerald-500 uppercase tracking-wider">
                 Simulation Scorecard
               </span>
-              <h3 className="text-base sm:text-lg font-bold text-slate-100 mt-1">
+              <h3 className="text-base sm:text-lg font-bold text-notion-text mt-1">
                 {regionName}
               </h3>
             </div>
 
             {/* Composite Score Card */}
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 text-center">
-              <span className="text-xs text-slate-400 uppercase tracking-wider block font-medium">
+            <div className="bg-notion-bg border border-notion-border rounded-xl p-5 text-center">
+              <span className="text-xs text-notion-secondary uppercase tracking-wider block font-medium">
                 Composite Resilience Score
               </span>
-              <div className="text-4xl sm:text-5xl font-black text-emerald-400 font-mono my-2">
-                {simResults.resilience_index} <span className="text-base text-slate-500 font-normal">/ 100</span>
+              <div className="text-4xl sm:text-5xl font-black text-emerald-500 font-mono my-2">
+                {simResults.resilience_index} <span className="text-base text-notion-secondary font-normal">/ 100</span>
               </div>
-              <div className="text-xs sm:text-sm text-slate-300 mt-2">
-                Capex: <strong className="text-slate-100">Rs. {estimatedCostCr.toFixed(1)} Cr</strong> · Headroom:{" "}
-                <strong className="text-emerald-400">Rs. {headroomCr.toFixed(1)} Cr</strong>
+              <div className="text-xs sm:text-sm text-notion-text mt-2">
+                Capex: <strong className="text-notion-text">Rs. {estimatedCostCr.toFixed(1)} Cr</strong> · Headroom:{" "}
+                <strong className="text-emerald-500">Rs. {headroomCr.toFixed(1)} Cr</strong>
               </div>
             </div>
 
@@ -454,12 +454,12 @@ export function ScenarioSimulator({
             <div className="space-y-4 text-sm">
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-slate-300 font-medium">Flood Risk Mitigation</span>
-                  <span className="font-bold text-emerald-400 font-mono">
+                  <span className="text-notion-text font-medium">Flood Risk Mitigation</span>
+                  <span className="font-bold text-emerald-500 font-mono">
                     +{simResults.flood_risk_reduction_percentage}%
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-notion-hover rounded-full h-2.5 overflow-hidden">
                   <div
                     className="bg-emerald-500 h-2.5 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(100, simResults.flood_risk_reduction_percentage)}%` }}
@@ -469,12 +469,12 @@ export function ScenarioSimulator({
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-slate-300 font-medium">Aquifer Recharge Gain</span>
+                  <span className="text-notion-text font-medium">Aquifer Recharge Gain</span>
                   <span
                     className={`font-bold font-mono ${
                       simResults.groundwater_recharge_benefit_percentage >= 0
-                        ? "text-cyan-400"
-                        : "text-rose-400"
+                        ? "text-cyan-500"
+                        : "text-rose-500"
                     }`}
                   >
                     {simResults.groundwater_recharge_benefit_percentage >= 0
@@ -482,7 +482,7 @@ export function ScenarioSimulator({
                       : `${simResults.groundwater_recharge_benefit_percentage}%`}
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-notion-hover rounded-full h-2.5 overflow-hidden">
                   <div
                     className={`h-2.5 rounded-full transition-all duration-300 ${
                       simResults.groundwater_recharge_benefit_percentage >= 0
@@ -501,12 +501,12 @@ export function ScenarioSimulator({
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-slate-300 font-medium">Urban Heat Island Cooling</span>
-                  <span className="font-bold font-mono text-amber-300">
+                  <span className="text-notion-text font-medium">Urban Heat Island Cooling</span>
+                  <span className="font-bold font-mono text-amber-500">
                     -{simResults.urban_heat_reduction_percentage}°C
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-notion-hover rounded-full h-2.5 overflow-hidden">
                   <div
                     className="bg-amber-500 h-2.5 rounded-full transition-all duration-300"
                     style={{
@@ -518,14 +518,14 @@ export function ScenarioSimulator({
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-slate-300 font-medium">Environmental Score</span>
-                  <span className="font-bold font-mono text-emerald-400">
+                  <span className="text-notion-text font-medium">Environmental Score</span>
+                  <span className="font-bold font-mono text-emerald-500">
                     {simResults.environmental_impact_score} / 100
                   </span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-notion-hover rounded-full h-2.5 overflow-hidden">
                   <div
-                    className="bg-emerald-400 h-2.5 rounded-full transition-all duration-300"
+                    className="bg-emerald-500 h-2.5 rounded-full transition-all duration-300"
                     style={{ width: `${simResults.environmental_impact_score}%` }}
                   />
                 </div>
@@ -533,20 +533,20 @@ export function ScenarioSimulator({
             </div>
 
             {/* Strategic Notes */}
-            <div className="pt-4 border-t border-slate-800 space-y-2 text-xs sm:text-sm">
-              <span className="font-semibold text-slate-300 uppercase tracking-wider text-xs block mb-1">
+            <div className="pt-4 border-t border-notion-border space-y-2 text-xs sm:text-sm">
+              <span className="font-semibold text-notion-text uppercase tracking-wider text-xs block mb-1">
                 Summary of Trade-Offs
               </span>
-              <ul className="space-y-1.5 text-slate-300">
+              <ul className="space-y-1.5 text-notion-text">
                 {simResults.advantages.map((adv, i) => (
                   <li key={i} className="flex items-start space-x-2">
-                    <span className="text-emerald-400 font-bold text-sm">✓</span>
+                    <span className="text-emerald-500 font-bold text-sm">✓</span>
                     <span className="leading-relaxed">{adv}</span>
                   </li>
                 ))}
                 {simResults.tradeoffs.map((tr, i) => (
                   <li key={i} className="flex items-start space-x-2">
-                    <span className="text-amber-400 font-bold text-sm">•</span>
+                    <span className="text-amber-500 font-bold text-sm">•</span>
                     <span className="leading-relaxed">{tr}</span>
                   </li>
                 ))}
@@ -561,7 +561,7 @@ export function ScenarioSimulator({
                     `Evaluate simulated package for ${regionName} with Rs. ${budget} Cr budget and ${simResults.flood_risk_reduction_percentage}% flood containment.`
                   )
                 }
-                className="w-full py-3 px-4 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-200 text-sm font-semibold border border-slate-700 flex items-center justify-center space-x-2 transition-colors cursor-pointer"
+                className="w-full py-3 px-4 rounded-lg bg-notion-hover hover:bg-notion-border text-notion-text text-sm font-semibold border border-notion-border flex items-center justify-center space-x-2 transition-colors cursor-pointer"
               >
                 <span>Ask AI Assistant About this Result</span>
                 <ArrowRight className="w-4 h-4" />

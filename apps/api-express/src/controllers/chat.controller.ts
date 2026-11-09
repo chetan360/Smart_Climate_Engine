@@ -15,12 +15,22 @@ interface ChatRequestBody {
   priorities?: string[];
 }
 
-export async function handleChatMessage(req: Request, res: Response): Promise<void> {
-  const { message, history = [], region = "General Municipality", budget = 50, priorities = [] } =
-    req.body as ChatRequestBody;
+export async function handleChatMessage(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const {
+    message,
+    history = [],
+    region = "General Municipality",
+    budget = 50,
+    priorities = [],
+  } = req.body as ChatRequestBody;
 
   if (!message || typeof message !== "string" || !message.trim()) {
-    res.status(400).json({ success: false, error: "A message string is required." });
+    res
+      .status(400)
+      .json({ success: false, error: "A message string is required." });
     return;
   }
 
@@ -28,11 +38,14 @@ export async function handleChatMessage(req: Request, res: Response): Promise<vo
   let fileNames: string[] = [];
   try {
     const filesRes = await pool.query(
-      "SELECT original_name FROM environmental.uploaded_files ORDER BY uploaded_at DESC LIMIT 5"
+      "SELECT original_name FROM environmental.uploaded_files ORDER BY uploaded_at DESC LIMIT 5",
     );
     fileNames = filesRes.rows.map((r: any) => r.original_name);
   } catch {
-    fileNames = ["City_Monsoon_Drainage_MasterPlan_2025.pdf", "Regional_Aquifer_Recharge_Zones.geojson"];
+    fileNames = [
+      "City_Monsoon_Drainage_MasterPlan_2025.pdf",
+      "Regional_Aquifer_Recharge_Zones.geojson",
+    ];
   }
 
   // 2. Delegate AI reasoning, NLP query understanding, and trade-off calculation to ml-service

@@ -109,28 +109,28 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
   };
 
   return (
-    <div className="flex flex-col h-[760px] bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-md">
+    <div className="flex flex-col h-[760px] bg-notion-sidebar border border-notion-border rounded-xl overflow-hidden shadow-md">
       {/* Chat Header */}
-      <div className="p-4 sm:p-5 bg-slate-950 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="p-4 sm:p-5 bg-notion-bg border-b border-notion-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <div className="flex items-center space-x-2.5">
-            <h2 className="text-lg sm:text-xl font-bold text-slate-100 flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-emerald-400" />
+            <h2 className="text-lg sm:text-xl font-bold text-notion-text flex items-center space-x-2">
+              <MessageSquare className="w-5 h-5 text-emerald-500" />
               <span>AI Decision Planning Assistant</span>
             </h2>
-            <span className="text-xs sm:text-sm px-2.5 py-0.5 rounded bg-slate-800 text-slate-300 font-medium">
+            <span className="text-xs sm:text-sm px-2.5 py-0.5 rounded bg-notion-sidebar text-notion-secondary border border-notion-border font-medium">
               {selectedRegion}
             </span>
           </div>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-notion-secondary mt-1">
             Ask climate scenario questions, compare intervention options, or draft executive council resolutions
           </p>
         </div>
 
         <div className="flex items-center space-x-3">
           {/* Budget Adjustment Control */}
-          <div className="flex items-center space-x-2 bg-slate-900 px-3 py-2 rounded-lg border border-slate-800">
-            <label className="text-xs sm:text-sm text-slate-300 font-medium whitespace-nowrap">
+          <div className="flex items-center space-x-2 bg-notion-sidebar px-3 py-2 rounded-lg border border-notion-border">
+            <label className="text-xs sm:text-sm text-notion-text font-medium whitespace-nowrap">
               Planning Budget:
             </label>
             <input
@@ -139,16 +139,16 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
               max={500}
               value={budgetCr}
               onChange={(e) => setBudgetCr(Number(e.target.value) || 50)}
-              className="w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-sm sm:text-base text-emerald-400 font-mono font-bold text-right"
+              className="w-20 bg-notion-bg border border-notion-border rounded px-2.5 py-1 text-sm sm:text-base text-emerald-500 font-mono font-bold text-right"
             />
-            <span className="text-xs sm:text-sm text-slate-400 font-medium">Cr (INR)</span>
+            <span className="text-xs sm:text-sm text-notion-secondary font-medium">Cr (INR)</span>
           </div>
 
           {/* Reset Conversation Button */}
           <button
             onClick={() => setMessages(INITIAL_MESSAGES)}
             title="Reset to initial welcome message"
-            className="flex items-center space-x-1.5 px-3 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer"
+            className="flex items-center space-x-1.5 px-3 py-2 bg-notion-sidebar hover:bg-notion-hover border border-notion-border text-notion-secondary hover:text-notion-text rounded-lg text-xs sm:text-sm transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Reset</span>
@@ -166,17 +166,17 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
               className={`flex flex-col ${isUser ? "items-end" : "items-start"} max-w-4xl mx-auto`}
             >
               <div className="flex items-center space-x-2 mb-1 px-1">
-                <span className="text-xs font-semibold text-slate-400">
+                <span className="text-xs font-semibold text-notion-secondary">
                   {isUser ? "Municipal Official" : "Climate Decision Engine"}
                 </span>
-                <span className="text-xs text-slate-500">{m.timestamp}</span>
+                <span className="text-xs text-notion-secondary/70">{m.timestamp}</span>
               </div>
 
               <div
                 className={`p-4 sm:p-5 rounded-xl text-sm leading-relaxed max-w-3xl shadow-sm ${
                   isUser
-                    ? "bg-emerald-950/50 text-emerald-100 border border-emerald-800/60"
-                    : "bg-slate-950 text-slate-200 border border-slate-800"
+                    ? "bg-emerald-500/15 text-notion-text border border-emerald-500/30"
+                    : "bg-notion-bg text-notion-text border border-notion-border"
                 }`}
               >
                 {/* Message Body */}
@@ -190,42 +190,42 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
                       remarkPlugins={[remarkGfm]}
                       components={{
                         h1: ({ children }) => (
-                          <h1 className="text-base sm:text-lg font-bold text-slate-100 mt-3 mb-2 pb-1.5 border-b border-slate-800">
+                          <h1 className="text-base sm:text-lg font-bold text-notion-text mt-3 mb-2 pb-1.5 border-b border-notion-border">
                             {children}
                           </h1>
                         ),
                         h2: ({ children }) => (
-                          <h2 className="text-sm sm:text-base font-bold text-slate-100 mt-2.5 mb-1.5">
+                          <h2 className="text-sm sm:text-base font-bold text-notion-text mt-2.5 mb-1.5">
                             {children}
                           </h2>
                         ),
                         h3: ({ children }) => (
-                          <h3 className="text-sm sm:text-base font-bold text-emerald-400 mt-2.5 mb-1 flex items-center gap-1.5">
+                          <h3 className="text-sm sm:text-base font-bold text-emerald-500 mt-2.5 mb-1 flex items-center gap-1.5">
                             {children}
                           </h3>
                         ),
                         h4: ({ children }) => (
-                          <h4 className="text-xs sm:text-sm font-semibold text-slate-200 mt-2 mb-1">
+                          <h4 className="text-xs sm:text-sm font-semibold text-notion-text mt-2 mb-1">
                             {children}
                           </h4>
                         ),
                         p: ({ children }) => (
-                          <p className="mb-2.5 leading-relaxed text-slate-200 last:mb-0">
+                          <p className="mb-2.5 leading-relaxed text-notion-text last:mb-0">
                             {children}
                           </p>
                         ),
                         strong: ({ children }) => (
-                          <strong className="font-semibold text-slate-100">
+                          <strong className="font-semibold text-notion-text">
                             {children}
                           </strong>
                         ),
                         ul: ({ children }) => (
-                          <ul className="list-disc list-outside pl-5 space-y-1.5 mb-3 text-slate-300">
+                          <ul className="list-disc list-outside pl-5 space-y-1.5 mb-3 text-notion-text">
                             {children}
                           </ul>
                         ),
                         ol: ({ children }) => (
-                          <ol className="list-decimal list-outside pl-5 space-y-1.5 mb-3 text-slate-300">
+                          <ol className="list-decimal list-outside pl-5 space-y-1.5 mb-3 text-notion-text">
                             {children}
                           </ol>
                         ),
@@ -235,42 +235,42 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
                           </li>
                         ),
                         table: ({ children }) => (
-                          <div className="overflow-x-auto my-3 rounded-lg border border-slate-800">
+                          <div className="overflow-x-auto my-3 rounded-lg border border-notion-border">
                             <table className="w-full text-left text-xs sm:text-sm border-collapse">
                               {children}
                             </table>
                           </div>
                         ),
                         thead: ({ children }) => (
-                          <thead className="bg-slate-900 text-slate-200 border-b border-slate-800">
+                          <thead className="bg-notion-sidebar text-notion-text border-b border-notion-border">
                             {children}
                           </thead>
                         ),
                         tbody: ({ children }) => (
-                          <tbody className="divide-y divide-slate-800 bg-slate-950/70">
+                          <tbody className="divide-y divide-notion-border bg-notion-bg">
                             {children}
                           </tbody>
                         ),
                         tr: ({ children }) => (
-                          <tr className="hover:bg-slate-900/50 transition-colors">
+                          <tr className="hover:bg-notion-hover/50 transition-colors">
                             {children}
                           </tr>
                         ),
                         th: ({ children }) => (
-                          <th className="px-3.5 py-2 font-semibold text-slate-200 text-xs uppercase tracking-wider">
+                          <th className="px-3.5 py-2 font-semibold text-notion-text text-xs uppercase tracking-wider">
                             {children}
                           </th>
                         ),
                         td: ({ children }) => (
-                          <td className="px-3.5 py-2 text-slate-300 text-xs sm:text-sm">
+                          <td className="px-3.5 py-2 text-notion-text text-xs sm:text-sm">
                             {children}
                           </td>
                         ),
                         hr: () => (
-                          <hr className="border-slate-800 my-3" />
+                          <hr className="border-notion-border my-3" />
                         ),
                         code: ({ children }) => (
-                          <code className="bg-slate-900 text-emerald-400 px-1.5 py-0.5 rounded font-mono text-xs">
+                          <code className="bg-notion-hover text-emerald-500 px-1.5 py-0.5 rounded font-mono text-xs">
                             {children}
                           </code>
                         ),
@@ -283,30 +283,30 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
 
                 {/* Optional Metric Summary Card */}
                 {m.metrics && (
-                  <div className="mt-4 p-3 rounded-lg bg-slate-900 border border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                  <div className="mt-4 p-3 rounded-lg bg-notion-sidebar border border-notion-border grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
                     <div>
-                      <span className="text-xs text-slate-400 block mb-0.5">Option A Capex</span>
-                      <strong className="text-sm font-bold text-slate-200">{m.metrics.optionA_cost}</strong>
+                      <span className="text-xs text-notion-secondary block mb-0.5">Option A Capex</span>
+                      <strong className="text-sm font-bold text-notion-text">{m.metrics.optionA_cost}</strong>
                     </div>
                     <div>
-                      <span className="text-xs text-slate-400 block mb-0.5">Option D Capex</span>
-                      <strong className="text-sm font-bold text-emerald-400">{m.metrics.optionD_cost}</strong>
+                      <span className="text-xs text-notion-secondary block mb-0.5">Option D Capex</span>
+                      <strong className="text-sm font-bold text-emerald-500">{m.metrics.optionD_cost}</strong>
                     </div>
                     <div>
-                      <span className="text-xs text-slate-400 block mb-0.5">Groundwater Delta</span>
-                      <strong className="text-sm font-bold text-cyan-400">{m.metrics.optionD_gw}</strong>
+                      <span className="text-xs text-notion-secondary block mb-0.5">Groundwater Delta</span>
+                      <strong className="text-sm font-bold text-cyan-500">{m.metrics.optionD_gw}</strong>
                     </div>
                     <div>
-                      <span className="text-xs text-slate-400 block mb-0.5">Fiscal Savings</span>
-                      <strong className="text-sm font-bold text-emerald-400">{m.metrics.savings}</strong>
+                      <span className="text-xs text-notion-secondary block mb-0.5">Fiscal Savings</span>
+                      <strong className="text-sm font-bold text-emerald-500">{m.metrics.savings}</strong>
                     </div>
                   </div>
                 )}
 
                 {/* Follow-up Prompts */}
                 {m.suggestedFollowups && m.suggestedFollowups.length > 0 && !isUser && (
-                  <div className="mt-4 pt-3.5 border-t border-slate-800">
-                    <span className="text-xs font-semibold text-slate-400 block mb-2">
+                  <div className="mt-4 pt-3.5 border-t border-notion-border">
+                    <span className="text-xs font-semibold text-notion-secondary block mb-2">
                       Suggested Follow-up Questions:
                     </span>
                     <div className="flex flex-wrap gap-2">
@@ -314,7 +314,7 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
                         <button
                           key={i}
                           onClick={() => handleSendMessage(f)}
-                          className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs sm:text-sm text-slate-300 border border-slate-700 hover:border-slate-600 transition-colors text-left cursor-pointer"
+                          className="px-3 py-1.5 rounded-lg bg-notion-sidebar hover:bg-notion-hover text-xs sm:text-sm text-notion-text border border-notion-border transition-colors text-left cursor-pointer"
                         >
                           {f}
                         </button>
@@ -325,15 +325,15 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
 
                 {/* Action Bar */}
                 {!isUser && (
-                  <div className="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                  <div className="mt-3 pt-2.5 border-t border-notion-border flex items-center justify-between text-xs text-notion-secondary">
                     <button
                       onClick={() => handleCopy(m.content, m.id)}
-                      className="flex items-center space-x-1.5 hover:text-slate-200 cursor-pointer"
+                      className="flex items-center space-x-1.5 hover:text-notion-text cursor-pointer"
                     >
                       {copiedId === m.id ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400 font-medium">Copied to Clipboard</span>
+                          <Check className="w-3.5 h-3.5 text-emerald-500" />
+                          <span className="text-emerald-500 font-medium">Copied to Clipboard</span>
                         </>
                       ) : (
                         <>
@@ -345,7 +345,7 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
                     {onNavigateToTab && (
                       <button
                         onClick={() => onNavigateToTab("simulator")}
-                        className="hover:text-emerald-400 underline cursor-pointer"
+                        className="hover:text-emerald-500 underline cursor-pointer"
                       >
                         Adjust in Scenario Simulator →
                       </button>
@@ -358,8 +358,8 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
         })}
 
         {isLoading && (
-          <div className="flex items-center space-x-2 text-sm text-slate-400 p-3">
-            <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
+          <div className="flex items-center space-x-2 text-sm text-notion-secondary p-3">
+            <RefreshCw className="w-4 h-4 animate-spin text-emerald-500" />
             <span>Consulting climate decision models...</span>
           </div>
         )}
@@ -367,10 +367,10 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
       </div>
 
       {/* Input Form & Quick Prompt Actions */}
-      <div className="p-4 sm:p-5 bg-slate-950 border-t border-slate-800 space-y-3">
+      <div className="p-4 sm:p-5 bg-notion-bg border-t border-notion-border space-y-3">
         {/* Quick Suggestion Chips */}
         <div className="max-w-4xl mx-auto flex items-center space-x-2 overflow-x-auto pb-1 text-xs sm:text-sm">
-          <span className="text-slate-400 font-medium whitespace-nowrap">Suggested Prompts:</span>
+          <span className="text-notion-secondary font-medium whitespace-nowrap">Suggested Prompts:</span>
           {[
             "Compare Heavy Drainage (Option A) vs Sponge City (Option D)",
             `Draft a council resolution for Rs. ${budgetCr} Cr climate package`,
@@ -381,7 +381,7 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
               key={idx}
               type="button"
               onClick={() => handleSendMessage(prompt)}
-              className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-emerald-300 border border-slate-700/80 hover:border-emerald-600/50 whitespace-nowrap transition-colors cursor-pointer text-xs sm:text-sm shrink-0"
+              className="px-3 py-1.5 rounded-lg bg-notion-sidebar hover:bg-notion-hover text-notion-text hover:text-emerald-500 border border-notion-border whitespace-nowrap transition-colors cursor-pointer text-xs sm:text-sm shrink-0"
             >
               {prompt}
             </button>
@@ -401,12 +401,12 @@ export function OfficialChat({ selectedRegion, onNavigateToTab }: OfficialChatPr
             onChange={(e) => setInput(e.target.value)}
             placeholder={`Ask any climate scenario question for ${selectedRegion} (or click a prompt above)...`}
             disabled={isLoading}
-            className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-3.5 text-base text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 shadow-inner"
+            className="flex-1 bg-notion-sidebar border border-notion-border rounded-lg px-4 py-3.5 text-base text-notion-text placeholder-notion-secondary focus:outline-none focus:border-emerald-500 shadow-inner"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 font-bold rounded-lg text-base flex items-center space-x-2 transition-colors cursor-pointer shrink-0 shadow-sm"
+            className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold rounded-lg text-base flex items-center space-x-2 transition-colors cursor-pointer shrink-0 shadow-sm"
           >
             <span>Send</span>
             <Send className="w-4 h-4" />
