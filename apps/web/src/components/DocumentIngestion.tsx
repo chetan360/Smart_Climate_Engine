@@ -98,7 +98,7 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
   const getFormatBadge = (mime: string, name: string) => {
     const ext = name.split(".").pop()?.toUpperCase() || "FILE";
     return (
-      <span className="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-slate-800 text-slate-200 border border-slate-700">
+      <span className="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-notion-hover text-notion-text border border-notion-border">
         {ext}
       </span>
     );
@@ -107,33 +107,33 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm">
+      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-lg sm:text-xl font-bold text-slate-100 flex items-center space-x-2.5">
-              <UploadCloud className="w-5 h-5 text-emerald-400" />
+            <h1 className="text-lg sm:text-xl font-bold text-notion-text flex items-center space-x-2.5">
+              <UploadCloud className="w-5 h-5 text-emerald-500" />
               <span>Municipal Document & Data Ingestion</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-notion-secondary mt-1 max-w-3xl leading-relaxed">
               Upload regional GIS shapefiles (GeoJSON/KML), monsoon drainage master plans (PDF), hydrological telemetry (CSV), or municipal budgets (XLSX). Files are routed through the Express gateway and indexed for AI scenario simulation.
             </p>
           </div>
-          <div className="text-xs sm:text-sm text-slate-300 bg-slate-950 px-4 py-2.5 rounded-lg border border-slate-800 whitespace-nowrap shadow-inner">
-            <span className="text-emerald-400 font-bold font-mono text-sm sm:text-base mr-1.5">{files.length}</span>
+          <div className="text-xs sm:text-sm text-notion-text bg-notion-bg px-4 py-2.5 rounded-lg border border-notion-border whitespace-nowrap shadow-inner">
+            <span className="text-emerald-500 font-bold font-mono text-sm sm:text-base mr-1.5">{files.length}</span>
             <span>Documents Indexed</span>
           </div>
         </div>
       </div>
 
       {/* Real Upload Form */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
-        <h2 className="text-base font-bold text-slate-100">Upload Environmental Document or Spatial File</h2>
+      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
+        <h2 className="text-base font-bold text-notion-text">Upload Environmental Document or Spatial File</h2>
 
         <form onSubmit={handleUpload} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* File Input */}
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-1.5">
+              <label className="block text-sm font-semibold text-notion-text mb-1.5">
                 Select File (PDF, GeoJSON, CSV, XLSX, KML - Max 25MB)
               </label>
               <input
@@ -142,20 +142,20 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
                 accept=".pdf,.geojson,.json,.csv,.xlsx,.xls,.kml"
                 onChange={handleFileChange}
                 disabled={isUploading}
-                className="w-full text-sm text-slate-300 file:mr-3 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-bold file:bg-slate-800 file:text-emerald-400 hover:file:bg-slate-700 bg-slate-950 border border-slate-700 rounded-lg p-2 focus:outline-none cursor-pointer"
+                className="w-full text-sm text-notion-text file:mr-3 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-bold file:bg-notion-hover file:text-emerald-500 hover:file:bg-notion-border bg-notion-bg border border-notion-border rounded-lg p-2 focus:outline-none cursor-pointer"
               />
             </div>
 
             {/* Target Region Tag */}
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-1.5">
+              <label className="block text-sm font-semibold text-notion-text mb-1.5">
                 Associate with Municipality / Region
               </label>
               <select
                 value={targetRegion}
                 onChange={(e) => setTargetRegion(e.target.value)}
                 disabled={isUploading}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                className="w-full bg-notion-bg border border-notion-border rounded-lg px-3.5 py-2.5 text-sm text-notion-text focus:outline-none focus:border-emerald-500 cursor-pointer"
               >
                 {regions.map((r) => (
                   <option key={r.id} value={r.name}>
@@ -168,10 +168,10 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
 
           {/* Action Row */}
           <div className="flex items-center justify-between pt-2">
-            <div className="text-xs sm:text-sm text-slate-400">
+            <div className="text-xs sm:text-sm text-notion-secondary">
               {selectedFile ? (
                 <span>
-                  Selected file: <strong className="text-slate-100">{selectedFile.name}</strong> ({formatFileSize(selectedFile.size)})
+                  Selected file: <strong className="text-notion-text">{selectedFile.name}</strong> ({formatFileSize(selectedFile.size)})
                 </span>
               ) : (
                 <span>No file selected yet.</span>
@@ -181,7 +181,7 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
             <button
               type="submit"
               disabled={isUploading || !selectedFile}
-              className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-slate-950 font-bold rounded-lg text-sm flex items-center space-x-2 transition-colors cursor-pointer shadow-sm"
+              className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold rounded-lg text-sm flex items-center space-x-2 transition-colors cursor-pointer shadow-sm"
             >
               <UploadCloud className="w-4 h-4" />
               <span>{isUploading ? "Uploading via Gateway..." : "Upload & Index Document"}</span>
@@ -194,14 +194,14 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
           <div
             className={`p-3.5 rounded-lg text-sm flex items-center space-x-2.5 ${
               statusMessage.type === "success"
-                ? "bg-emerald-950/50 text-emerald-300 border border-emerald-800/60"
-                : "bg-red-950/50 text-red-300 border border-red-800/60"
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30"
+                : "bg-red-500/10 text-red-600 dark:text-red-300 border border-red-500/30"
             }`}
           >
             {statusMessage.type === "success" ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
             ) : (
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
             )}
             <span className="leading-relaxed">{statusMessage.text}</span>
           </div>
@@ -209,29 +209,29 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
       </div>
 
       {/* Uploaded Documents Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <div className="p-4 sm:p-5 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-100">
+      <div className="bg-notion-sidebar border border-notion-border rounded-xl overflow-hidden shadow-sm">
+        <div className="p-4 sm:p-5 bg-notion-bg border-b border-notion-border flex items-center justify-between">
+          <h2 className="text-base font-bold text-notion-text">
             Registered Environmental Documents & GIS Datasets
           </h2>
           <button
             onClick={loadFiles}
-            className="text-xs sm:text-sm text-slate-400 hover:text-emerald-400 underline cursor-pointer"
+            className="text-xs sm:text-sm text-notion-secondary hover:text-emerald-500 underline cursor-pointer"
           >
             Refresh List
           </button>
         </div>
 
         {isLoadingList ? (
-          <div className="p-10 text-center text-sm text-slate-400">Loading document repository...</div>
+          <div className="p-10 text-center text-sm text-notion-secondary">Loading document repository...</div>
         ) : files.length === 0 ? (
-          <div className="p-10 text-center text-sm text-slate-500">
+          <div className="p-10 text-center text-sm text-notion-secondary">
             No documents uploaded yet. Upload a municipal report or GeoJSON file above.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-950/80 text-slate-300 uppercase text-xs tracking-wider border-b border-slate-800 font-semibold">
+              <thead className="bg-notion-bg text-notion-secondary uppercase text-xs tracking-wider border-b border-notion-border font-semibold">
                 <tr>
                   <th className="px-5 py-3.5">Document Name</th>
                   <th className="px-5 py-3.5">Format</th>
@@ -242,25 +242,25 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
                   <th className="px-5 py-3.5 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 text-slate-200">
+              <tbody className="divide-y divide-notion-border text-notion-text">
                 {files.map((file) => (
-                  <tr key={file.id} className="hover:bg-slate-850/50 transition-colors">
-                    <td className="px-5 py-3.5 font-medium text-slate-100 whitespace-nowrap">
+                  <tr key={file.id} className="hover:bg-notion-hover/50 transition-colors">
+                    <td className="px-5 py-3.5 font-medium text-notion-text whitespace-nowrap">
                       {file.original_name}
                     </td>
                     <td className="px-5 py-3.5 whitespace-nowrap">
                       {getFormatBadge(file.mime_type, file.original_name)}
                     </td>
-                    <td className="px-5 py-3.5 font-mono text-xs sm:text-sm text-slate-300 whitespace-nowrap">
+                    <td className="px-5 py-3.5 font-mono text-xs sm:text-sm text-notion-secondary whitespace-nowrap">
                       {formatFileSize(Number(file.size_bytes))}
                     </td>
-                    <td className="px-5 py-3.5 text-slate-300 whitespace-nowrap">
+                    <td className="px-5 py-3.5 text-notion-text whitespace-nowrap">
                       {file.region || "All Municipalities"}
                     </td>
-                    <td className="px-5 py-3.5 text-slate-300 max-w-sm leading-relaxed text-xs sm:text-sm">
+                    <td className="px-5 py-3.5 text-notion-secondary max-w-sm leading-relaxed text-xs sm:text-sm">
                       {file.summary}
                     </td>
-                    <td className="px-5 py-3.5 text-slate-400 whitespace-nowrap font-mono text-xs">
+                    <td className="px-5 py-3.5 text-notion-secondary whitespace-nowrap font-mono text-xs">
                       {new Date(file.uploaded_at).toLocaleDateString([], {
                         year: "numeric",
                         month: "short",
@@ -271,7 +271,7 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
                       <button
                         onClick={() => handleDelete(file.id, file.original_name)}
                         title="Remove file record"
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg text-notion-secondary hover:text-red-500 hover:bg-notion-hover transition-colors cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -285,9 +285,9 @@ export function DocumentIngestion({ selectedRegion, regions }: DocumentIngestion
       </div>
 
       {/* Integration Context Card */}
-      <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 text-sm text-slate-400 space-y-2">
-        <h3 className="font-bold text-slate-200 text-sm">How Ingested Files Guide Decision Intelligence:</h3>
-        <ul className="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-slate-300">
+      <div className="bg-notion-bg border border-notion-border rounded-xl p-5 text-sm text-notion-secondary space-y-2">
+        <h3 className="font-bold text-notion-text text-sm">How Ingested Files Guide Decision Intelligence:</h3>
+        <ul className="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-notion-text">
           <li><strong>GeoJSON / KML layers:</strong> Ingested into PostGIS to delineate administrative wards, natural retention swales, and flood-prone drainage junctions.</li>
           <li><strong>CSV Sensor Feeds:</strong> Provide continuous rainfall, stream stage, and AQI telemetry to calibrate scenario baseline models.</li>
           <li><strong>PDF Policy & DPR Documents:</strong> Parsed by the query reasoning engine to extract departmental cost limits and council guidelines.</li>

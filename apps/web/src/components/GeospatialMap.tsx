@@ -50,14 +50,14 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
   return (
     <div className="space-y-6">
       {/* Title */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-1">
+          <div className="flex items-center space-x-2 text-emerald-500 text-xs font-bold uppercase tracking-wider mb-1">
             <Layers className="w-4 h-4" />
             <span>PostGIS Spatial Intelligence</span>
           </div>
-          <h2 className="text-lg sm:text-xl font-bold text-slate-100">{selectedRegion}: Climate Hazard & Intervention GIS</h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">
+          <h2 className="text-lg sm:text-xl font-bold text-notion-text">{selectedRegion}: Climate Hazard & Intervention GIS</h2>
+          <p className="text-xs sm:text-sm text-notion-secondary mt-1 leading-relaxed">
             Spatial correlation of real-time sensor stations, river level telemetry, flood risk polygons, and Option D nature-based intervention corridors.
           </p>
         </div>
@@ -68,8 +68,8 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
             onClick={() => toggleLayer("flood")}
             className={`px-3 py-1.5 rounded-lg border flex items-center space-x-1.5 transition-colors cursor-pointer ${
               activeLayers.flood
-                ? "bg-rose-950/70 text-rose-300 border-rose-800 font-semibold"
-                : "bg-slate-950 text-slate-400 border-slate-800"
+                ? "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/40 font-semibold"
+                : "bg-notion-bg text-notion-secondary border-notion-border"
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5" />
@@ -80,8 +80,8 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
             onClick={() => toggleLayer("rivers")}
             className={`px-3 py-1.5 rounded-lg border flex items-center space-x-1.5 transition-colors cursor-pointer ${
               activeLayers.rivers
-                ? "bg-cyan-950/70 text-cyan-300 border-cyan-800 font-semibold"
-                : "bg-slate-950 text-slate-400 border-slate-800"
+                ? "bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border-cyan-500/40 font-semibold"
+                : "bg-notion-bg text-notion-secondary border-notion-border"
             }`}
           >
             <Droplets className="w-3.5 h-3.5" />
@@ -92,8 +92,8 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
             onClick={() => toggleLayer("heat")}
             className={`px-3 py-1.5 rounded-lg border flex items-center space-x-1.5 transition-colors cursor-pointer ${
               activeLayers.heat
-                ? "bg-amber-950/70 text-amber-300 border-amber-800 font-semibold"
-                : "bg-slate-950 text-slate-400 border-slate-800"
+                ? "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/40 font-semibold"
+                : "bg-notion-bg text-notion-secondary border-notion-border"
             }`}
           >
             <Thermometer className="w-3.5 h-3.5" />
@@ -104,8 +104,8 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
             onClick={() => toggleLayer("interventions")}
             className={`px-3 py-1.5 rounded-lg border flex items-center space-x-1.5 transition-colors cursor-pointer ${
               activeLayers.interventions
-                ? "bg-emerald-950/70 text-emerald-300 border-emerald-800 font-semibold"
-                : "bg-slate-950 text-slate-400 border-slate-800"
+                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/40 font-semibold"
+                : "bg-notion-bg text-notion-secondary border-notion-border"
             }`}
           >
             <CheckCircle className="w-3.5 h-3.5" />
@@ -117,8 +117,8 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
       {/* Main Map Canvas + Detail Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Interactive SVG GIS Map Canvas */}
-        <div className="lg:col-span-3 bg-slate-950 border border-slate-800 rounded-xl p-4 relative min-h-[500px] overflow-hidden flex items-center justify-center shadow-inner">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:32px_32px]" />
+        <div className="lg:col-span-3 bg-notion-bg border border-notion-border rounded-xl p-4 relative min-h-[500px] overflow-hidden flex items-center justify-center shadow-inner">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#88888810_1px,transparent_1px),linear-gradient(to_bottom,#88888810_1px,transparent_1px)] bg-[size:32px_32px]" />
 
           {/* SVG Cartographic Layer */}
           <svg className="w-full h-full min-h-[480px] absolute inset-0 pointer-events-none" viewBox="0 0 1000 650">
@@ -201,10 +201,10 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
           {/* Interactive Marker Pins */}
           {DEFAULT_STATIONS.map((station) => {
             const isSelected = selectedStation?.id === station.id;
-            let pinColor = "bg-cyan-600 text-slate-950";
+            let pinColor = "bg-cyan-600 text-white";
             if (station.type === "rainfall") pinColor = "bg-blue-600 text-white";
-            if (station.type === "surface_temp") pinColor = "bg-amber-600 text-slate-950";
-            if (station.type === "intervention") pinColor = "bg-emerald-600 text-slate-950 ring-2 ring-emerald-300";
+            if (station.type === "surface_temp") pinColor = "bg-amber-600 text-white";
+            if (station.type === "intervention") pinColor = "bg-emerald-600 text-white ring-2 ring-emerald-300";
 
             return (
               <button
@@ -218,7 +218,7 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
                 <div className={`p-2 rounded-full shadow-md ${pinColor} flex items-center justify-center`}>
                   <MapPin className="w-4 h-4" />
                 </div>
-                <span className={`absolute left-1/2 -translate-x-1/2 -bottom-6 px-2.5 py-1 rounded bg-slate-900 border border-slate-700 text-xs font-semibold text-slate-100 whitespace-nowrap shadow-md pointer-events-none transition-opacity ${
+                <span className={`absolute left-1/2 -translate-x-1/2 -bottom-6 px-2.5 py-1 rounded bg-notion-sidebar border border-notion-border text-xs font-semibold text-notion-text whitespace-nowrap shadow-md pointer-events-none transition-opacity ${
                   isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 }`}>
                   {station.name.split(" ")[0]}
@@ -228,50 +228,50 @@ export function GeospatialMap({ dataPoints, selectedRegion = "Metropolitan Area"
           })}
 
           {/* Overlay Map Badge */}
-          <div className="absolute top-4 left-4 bg-slate-900/90 border border-slate-800 rounded-lg px-3.5 py-2 text-xs sm:text-sm pointer-events-none shadow-sm">
-            <div className="font-bold text-slate-100">{selectedRegion}</div>
-            <div className="text-xs text-slate-400 mt-0.5">PostGIS Geospatial Grid · EPSG:4326 Projection</div>
+          <div className="absolute top-4 left-4 bg-notion-sidebar/90 border border-notion-border rounded-lg px-3.5 py-2 text-xs sm:text-sm pointer-events-none shadow-sm">
+            <div className="font-bold text-notion-text">{selectedRegion}</div>
+            <div className="text-xs text-notion-secondary mt-0.5">PostGIS Geospatial Grid · EPSG:4326 Projection</div>
           </div>
         </div>
 
         {/* Selected Station / Zone Inspector */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 flex flex-col justify-between space-y-5 shadow-sm">
+        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 flex flex-col justify-between space-y-5 shadow-sm">
           {selectedStation ? (
             <div className="space-y-4">
-              <div className="flex items-center space-x-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
+              <div className="flex items-center space-x-2 text-xs font-bold text-emerald-500 uppercase tracking-wider">
                 <Info className="w-4 h-4" />
                 <span>Station Telemetry Inspector</span>
               </div>
 
               <div>
-                <h3 className="font-bold text-slate-100 text-sm sm:text-base leading-snug">{selectedStation.name}</h3>
-                <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded mt-1.5 inline-block bg-slate-800 text-slate-300">
+                <h3 className="font-bold text-notion-text text-sm sm:text-base leading-snug">{selectedStation.name}</h3>
+                <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded mt-1.5 inline-block bg-notion-bg text-notion-text border border-notion-border">
                   {selectedStation.type.replace("_", " ").toUpperCase()}
                 </span>
               </div>
 
-              <div className="bg-slate-950 rounded-xl p-4 border border-slate-800 space-y-1.5 text-xs sm:text-sm">
-                <span className="text-slate-400 block text-xs">Live Telemetry Value:</span>
-                <div className="text-xl sm:text-2xl font-bold text-emerald-400 font-mono">{selectedStation.value}</div>
+              <div className="bg-notion-bg rounded-xl p-4 border border-notion-border space-y-1.5 text-xs sm:text-sm">
+                <span className="text-notion-secondary block text-xs">Live Telemetry Value:</span>
+                <div className="text-xl sm:text-2xl font-bold text-emerald-500 font-mono">{selectedStation.value}</div>
                 <div className="flex items-center space-x-2 pt-1.5">
                   <span className={`w-2.5 h-2.5 rounded-full ${
                     selectedStation.status === "alert" ? "bg-rose-500" : selectedStation.status === "warning" ? "bg-amber-500" : "bg-emerald-500"
                   }`} />
-                  <span className="text-slate-300 capitalize text-xs sm:text-sm font-medium">{selectedStation.status} Operational Tier</span>
+                  <span className="text-notion-text capitalize text-xs sm:text-sm font-medium">{selectedStation.status} Operational Tier</span>
                 </div>
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-950 rounded-xl p-4 border border-slate-800">
+              <p className="text-xs sm:text-sm text-notion-text leading-relaxed bg-notion-bg rounded-xl p-4 border border-notion-border">
                 {selectedStation.description}
               </p>
             </div>
           ) : (
-            <div className="text-center text-slate-400 text-sm py-12">
+            <div className="text-center text-notion-secondary text-sm py-12">
               Select any station pin on the map to inspect live telemetry.
             </div>
           )}
 
-          <div className="text-xs text-slate-500 border-t border-slate-800 pt-3">
+          <div className="text-xs text-notion-secondary border-t border-notion-border pt-3">
             Source: PostGIS Geospatial Layer · Routed via Express API
           </div>
         </div>

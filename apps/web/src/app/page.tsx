@@ -59,7 +59,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans">
+    <div className="min-h-screen flex flex-col bg-notion-bg text-notion-text font-sans">
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -116,19 +116,19 @@ export default function Home() {
       </main>
 
       {/* Clean Municipal Footer */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-7 text-sm text-slate-400 mt-12">
+      <footer className="border-t border-notion-border bg-notion-bg py-7 text-sm text-notion-secondary mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2.5">
-            <div className="w-6 h-6 rounded-lg bg-emerald-950 border border-emerald-700 flex items-center justify-center text-emerald-400">
+            <div className="w-6 h-6 rounded-lg bg-notion-sidebar border border-notion-border flex items-center justify-center text-accent-emerald">
               <ShieldCheck className="w-4 h-4" />
             </div>
-            <span className="text-slate-200 font-semibold text-sm sm:text-base">Smart Climate Engine</span>
-            <span className="text-xs sm:text-sm text-slate-400">· Decision Intelligence Platform</span>
+            <span className="text-notion-text font-semibold text-sm sm:text-base">Smart Climate Engine</span>
+            <span className="text-xs sm:text-sm text-notion-secondary">· Decision Intelligence Platform</span>
           </div>
 
-          <div className="text-center md:text-right text-xs sm:text-sm text-slate-400">
+          <div className="text-center md:text-right text-xs sm:text-sm text-notion-secondary">
             <span>Express API Gateway (Port 4000) · Python ML Simulation Engine · PostGIS Database</span>
-            <div className="text-slate-400 mt-1">
+            <div className="text-notion-secondary mt-1">
               Multi-Objective Pareto Optimization · Municipal Climate Planning
             </div>
           </div>

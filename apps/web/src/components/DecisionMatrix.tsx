@@ -32,43 +32,43 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm">
+      <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
+            <div className="text-xs font-bold text-emerald-500 uppercase tracking-wider mb-1">
               Decision Matrix & Trade-Offs
             </div>
-            <h1 className="text-lg sm:text-xl font-bold text-slate-100">
+            <h1 className="text-lg sm:text-xl font-bold text-notion-text">
               {selectedRegion}: Climate Resilience Intervention Comparison
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-notion-secondary mt-1 max-w-3xl leading-relaxed">
               Compare strategic options under the benchmark <strong>Rs. 50 Crore</strong> municipal capital budget envelope. The multi-objective engine calculates secondary impacts on aquifer recharge, downstream runoff, and urban heat.
             </p>
           </div>
 
           {/* Quick Metrics */}
           <div className="flex items-center space-x-3 shrink-0">
-            <div className="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-center">
-              <span className="text-xs text-slate-400 uppercase block font-medium">Benchmark Budget</span>
-              <span className="text-base sm:text-lg font-bold text-emerald-400 font-mono">Rs. 50.0 Cr</span>
+            <div className="bg-notion-bg border border-notion-border rounded-lg px-4 py-2.5 text-center">
+              <span className="text-xs text-notion-secondary uppercase block font-medium">Benchmark Budget</span>
+              <span className="text-base sm:text-lg font-bold text-emerald-500 font-mono">Rs. 50.0 Cr</span>
             </div>
-            <div className="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-center">
-              <span className="text-xs text-slate-400 uppercase block font-medium">Optimal Headroom</span>
-              <span className="text-base sm:text-lg font-bold text-cyan-400 font-mono">Rs. 15.0 Cr Saved</span>
+            <div className="bg-notion-bg border border-notion-border rounded-lg px-4 py-2.5 text-center">
+              <span className="text-xs text-notion-secondary uppercase block font-medium">Optimal Headroom</span>
+              <span className="text-base sm:text-lg font-bold text-cyan-500 font-mono">Rs. 15.0 Cr Saved</span>
             </div>
           </div>
         </div>
 
         {/* Sort & Filter Controls */}
-        <div className="mt-5 pt-3.5 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-sm">
+        <div className="mt-5 pt-3.5 border-t border-notion-border flex flex-wrap items-center justify-between gap-3 text-sm">
           <div className="flex items-center space-x-2">
-            <span className="text-slate-400 text-xs sm:text-sm font-medium">Sort Options:</span>
+            <span className="text-notion-secondary text-xs sm:text-sm font-medium">Sort Options:</span>
             <button
               onClick={() => setSortBy("default")}
               className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
                 sortBy === "default"
-                  ? "bg-slate-800 text-emerald-400 border border-slate-700 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
+                  : "text-notion-secondary hover:text-notion-text"
               }`}
             >
               Default
@@ -77,8 +77,8 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
               onClick={() => setSortBy("flood")}
               className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
                 sortBy === "flood"
-                  ? "bg-slate-800 text-emerald-400 border border-slate-700 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
+                  : "text-notion-secondary hover:text-notion-text"
               }`}
             >
               Highest Flood Safety
@@ -87,8 +87,8 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
               onClick={() => setSortBy("groundwater")}
               className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
                 sortBy === "groundwater"
-                  ? "bg-slate-800 text-emerald-400 border border-slate-700 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
+                  : "text-notion-secondary hover:text-notion-text"
               }`}
             >
               Best Aquifer Recharge
@@ -97,8 +97,8 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
               onClick={() => setSortBy("cost")}
               className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-colors cursor-pointer ${
                 sortBy === "cost"
-                  ? "bg-slate-800 text-emerald-400 border border-slate-700 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-notion-hover text-emerald-500 border border-notion-border font-bold"
+                  : "text-notion-secondary hover:text-notion-text"
               }`}
             >
               Lowest Cost
@@ -108,7 +108,7 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
           <div className="flex items-center space-x-2">
             <button
               onClick={handlePrint}
-              className="px-3.5 py-1.5 bg-slate-850 hover:bg-slate-800 text-slate-200 rounded-lg border border-slate-700 text-xs sm:text-sm flex items-center space-x-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 bg-notion-sidebar hover:bg-notion-hover text-notion-text rounded-lg border border-notion-border text-xs sm:text-sm flex items-center space-x-1.5 transition-colors cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               <span>Print / Export Decision Memo</span>
@@ -129,39 +129,39 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
               onClick={() => setSelectedId(option.id)}
               className={`cursor-pointer rounded-xl p-5 transition-all border flex flex-col justify-between shadow-sm ${
                 isRec
-                  ? "bg-slate-900 border-emerald-500 ring-2 ring-emerald-500/30"
+                  ? "bg-notion-sidebar border-emerald-500 ring-2 ring-emerald-500/30"
                   : isSelected
-                  ? "bg-slate-900 border-slate-500 ring-1 ring-slate-500"
-                  : "bg-slate-900/60 border-slate-800 hover:border-slate-700"
+                  ? "bg-notion-sidebar border-notion-secondary ring-1 ring-notion-secondary"
+                  : "bg-notion-sidebar/60 border-notion-border hover:border-notion-secondary"
               }`}
             >
               <div>
                 <div className="flex justify-between items-start mb-2">
-                  <h2 className="font-bold text-slate-100 text-sm sm:text-base leading-snug">
+                  <h2 className="font-bold text-notion-text text-sm sm:text-base leading-snug">
                     {option.name}
                   </h2>
                   {isRec && (
-                    <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-md shrink-0">
+                    <span className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 text-xs font-bold px-2.5 py-0.5 rounded-md shrink-0">
                       Recommended
                     </span>
                   )}
                 </div>
-                <p className="text-xs sm:text-sm text-slate-400 mb-4 line-clamp-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-notion-secondary mb-4 line-clamp-2 leading-relaxed">
                   {option.description}
                 </p>
 
                 {/* Score Table */}
-                <div className="space-y-2 text-sm bg-slate-950 rounded-lg p-3.5 border border-slate-800 font-mono">
+                <div className="space-y-2 text-sm bg-notion-bg rounded-lg p-3.5 border border-notion-border font-mono">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-400 font-sans text-xs sm:text-sm">Flood Containment:</span>
-                    <span className="font-bold text-emerald-400 text-sm sm:text-base">-{option.flood_risk_reduction_pct}%</span>
+                    <span className="text-notion-secondary font-sans text-xs sm:text-sm">Flood Containment:</span>
+                    <span className="font-bold text-emerald-500 text-sm sm:text-base">-{option.flood_risk_reduction_pct}%</span>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-400 font-sans text-xs sm:text-sm">Aquifer Recharge:</span>
+                    <span className="text-notion-secondary font-sans text-xs sm:text-sm">Aquifer Recharge:</span>
                     <span
                       className={`font-bold text-sm sm:text-base ${
-                        option.groundwater_recharge_pct > 0 ? "text-cyan-400" : "text-rose-400"
+                        option.groundwater_recharge_pct > 0 ? "text-cyan-500" : "text-rose-500"
                       }`}
                     >
                       {option.groundwater_recharge_pct > 0
@@ -171,22 +171,22 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-400 font-sans text-xs sm:text-sm">Heat Mitigation:</span>
-                    <span className="font-bold text-amber-300 text-sm sm:text-base">-{option.urban_heat_reduction_deg}°C</span>
+                    <span className="text-notion-secondary font-sans text-xs sm:text-sm">Heat Mitigation:</span>
+                    <span className="font-bold text-amber-500 text-sm sm:text-base">-{option.urban_heat_reduction_deg}°C</span>
                   </div>
 
-                  <div className="flex justify-between items-center border-t border-slate-800 pt-2">
-                    <span className="text-slate-400 font-sans text-xs sm:text-sm">Estimated Cost:</span>
-                    <span className="font-bold text-slate-100 text-sm sm:text-base">Rs. {option.cost_crores} Cr</span>
+                  <div className="flex justify-between items-center border-t border-notion-border pt-2">
+                    <span className="text-notion-secondary font-sans text-xs sm:text-sm">Estimated Cost:</span>
+                    <span className="font-bold text-notion-text text-sm sm:text-base">Rs. {option.cost_crores} Cr</span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">{option.implementation_months} mo timeline</span>
+              <div className="mt-4 pt-3 border-t border-notion-border flex items-center justify-between text-xs sm:text-sm">
+                <span className="text-notion-secondary">{option.implementation_months} mo timeline</span>
                 <span
                   className={`font-semibold flex items-center space-x-1 ${
-                    isSelected ? "text-emerald-400" : "text-slate-400"
+                    isSelected ? "text-emerald-500" : "text-notion-secondary"
                   }`}
                 >
                   <span>{isSelected ? "Inspecting" : "Select Option"}</span>
@@ -201,30 +201,30 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
       {/* Selected Scenario Deep-Dive & Action Box */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Scenario Details & Hidden Trade-off */}
-        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div className="lg:col-span-2 bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 space-y-5 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-notion-border pb-4">
             <div>
-              <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+              <span className="text-xs text-notion-secondary uppercase tracking-wider font-semibold">
                 Detailed Strategy Evaluation
               </span>
-              <h2 className="text-base sm:text-lg font-bold text-slate-100 mt-0.5">
+              <h2 className="text-base sm:text-lg font-bold text-notion-text mt-0.5">
                 {selectedScenario.name}
               </h2>
             </div>
             <div className="flex items-center space-x-2 text-sm">
-              <span className="px-3 py-1 rounded-lg bg-slate-950 text-slate-200 border border-slate-800 font-mono font-bold">
+              <span className="px-3 py-1 rounded-lg bg-notion-bg text-notion-text border border-notion-border font-mono font-bold">
                 Rs. {selectedScenario.cost_crores} Cr
               </span>
-              <span className="px-3 py-1 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-mono font-bold">
+              <span className="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-mono font-bold">
                 Feasibility: {selectedScenario.feasibility_score} / 100
               </span>
             </div>
           </div>
 
           {/* Hidden Trade-off Callout */}
-          <div className="bg-amber-950/30 border border-amber-800/50 rounded-xl p-4 text-xs sm:text-sm text-amber-200 space-y-1.5">
-            <div className="font-bold text-amber-400 flex items-center space-x-2 text-sm sm:text-base">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-xs sm:text-sm text-amber-600 dark:text-amber-200 space-y-1.5">
+            <div className="font-bold text-amber-600 dark:text-amber-400 flex items-center space-x-2 text-sm sm:text-base">
+              <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
               <span>Cross-System Trade-Off Analysis</span>
             </div>
             <p className="leading-relaxed">{selectedScenario.tradeoff_note}</p>
@@ -232,30 +232,30 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
 
           {/* Advantages vs Limitations */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-4">
-              <h3 className="font-bold text-emerald-400 uppercase text-xs tracking-wider mb-2.5 flex items-center space-x-1.5">
+            <div className="bg-notion-bg border border-notion-border rounded-xl p-4">
+              <h3 className="font-bold text-emerald-500 uppercase text-xs tracking-wider mb-2.5 flex items-center space-x-1.5">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Primary Operational Strengths</span>
               </h3>
-              <ul className="space-y-1.5 text-slate-300">
+              <ul className="space-y-1.5 text-notion-text">
                 {selectedScenario.advantages.map((adv, idx) => (
                   <li key={idx} className="flex items-start space-x-2">
-                    <span className="text-emerald-400 font-bold">•</span>
+                    <span className="text-emerald-500 font-bold">•</span>
                     <span className="leading-relaxed">{adv}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-4">
-              <h3 className="font-bold text-rose-400 uppercase text-xs tracking-wider mb-2.5 flex items-center space-x-1.5">
+            <div className="bg-notion-bg border border-notion-border rounded-xl p-4">
+              <h3 className="font-bold text-rose-500 uppercase text-xs tracking-wider mb-2.5 flex items-center space-x-1.5">
                 <AlertTriangle className="w-4 h-4" />
                 <span>Regulatory & Implementation Limitations</span>
               </h3>
-              <ul className="space-y-1.5 text-slate-300">
+              <ul className="space-y-1.5 text-notion-text">
                 {selectedScenario.disadvantages.map((dis, idx) => (
                   <li key={idx} className="flex items-start space-x-2">
-                    <span className="text-rose-400 font-bold">•</span>
+                    <span className="text-rose-500 font-bold">•</span>
                     <span className="leading-relaxed">{dis}</span>
                   </li>
                 ))}
@@ -265,36 +265,36 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
         </div>
 
         {/* Human-in-the-Loop Municipal Adoption Panel */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 flex flex-col justify-between space-y-5 shadow-sm">
+        <div className="bg-notion-sidebar border border-notion-border rounded-xl p-5 sm:p-6 flex flex-col justify-between space-y-5 shadow-sm">
           <div>
-            <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
+            <div className="text-xs font-bold text-emerald-500 uppercase tracking-wider mb-1">
               Official Decision Approval
             </div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-100">Municipal Council Action</h3>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">
+            <h3 className="text-base sm:text-lg font-bold text-notion-text">Municipal Council Action</h3>
+            <p className="text-xs sm:text-sm text-notion-secondary mt-1 leading-relaxed">
               The AI Decision Engine presents quantitative simulations and trade-off rationales. The official authority records the final adoption.
             </p>
 
-            <div className="mt-4 space-y-2.5 bg-slate-950 rounded-xl p-4 border border-slate-800 text-xs sm:text-sm font-mono">
-              <div className="flex justify-between text-slate-300">
-                <span className="font-sans text-slate-400">Strategy:</span>
-                <span className="font-bold text-slate-100">{selectedScenario.name.split(":")[0]}</span>
+            <div className="mt-4 space-y-2.5 bg-notion-bg rounded-xl p-4 border border-notion-border text-xs sm:text-sm font-mono">
+              <div className="flex justify-between text-notion-text">
+                <span className="font-sans text-notion-secondary">Strategy:</span>
+                <span className="font-bold text-notion-text">{selectedScenario.name.split(":")[0]}</span>
               </div>
-              <div className="flex justify-between text-slate-300">
-                <span className="font-sans text-slate-400">Capital Outlay:</span>
-                <span className="font-bold text-emerald-400">Rs. {selectedScenario.cost_crores} Cr</span>
+              <div className="flex justify-between text-notion-text">
+                <span className="font-sans text-notion-secondary">Capital Outlay:</span>
+                <span className="font-bold text-emerald-500">Rs. {selectedScenario.cost_crores} Cr</span>
               </div>
-              <div className="flex justify-between text-slate-300">
-                <span className="font-sans text-slate-400">Fiscal Reserve:</span>
-                <span className="font-bold text-cyan-400">Rs. {50 - selectedScenario.cost_crores} Cr</span>
+              <div className="flex justify-between text-notion-text">
+                <span className="font-sans text-notion-secondary">Fiscal Reserve:</span>
+                <span className="font-bold text-cyan-500">Rs. {50 - selectedScenario.cost_crores} Cr</span>
               </div>
-              <div className="flex justify-between text-slate-300 border-t border-slate-800 pt-2">
-                <span className="font-sans text-slate-400">Status:</span>
+              <div className="flex justify-between text-notion-text border-t border-notion-border pt-2">
+                <span className="font-sans text-notion-secondary">Status:</span>
                 <span
                   className={
                     adoptedOption === selectedScenario.id
-                      ? "text-emerald-400 font-bold"
-                      : "text-amber-400 font-semibold"
+                      ? "text-emerald-500 font-bold"
+                      : "text-amber-500 font-semibold"
                   }
                 >
                   {adoptedOption === selectedScenario.id ? "Approved & Logged" : "Pending Official Call"}
@@ -306,7 +306,7 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
           <div className="space-y-2.5 pt-2">
             <button
               onClick={() => setAdoptedOption(selectedScenario.id)}
-              className="w-full py-3 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-sm transition-colors flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
+              className="w-full py-3 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-colors flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>
@@ -323,7 +323,7 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
                     `Draft a formal council resolution approving ${selectedScenario.name} for ${selectedRegion} at Rs. ${selectedScenario.cost_crores} Cr.`
                   )
                 }
-                className="w-full py-2.5 px-4 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs sm:text-sm font-semibold border border-slate-700 transition-colors cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-lg bg-notion-hover hover:bg-notion-border text-notion-text text-xs sm:text-sm font-semibold border border-notion-border transition-colors cursor-pointer"
               >
                 Draft Resolution Note in Chat →
               </button>
@@ -340,7 +340,7 @@ export function DecisionMatrix({ scenarios, selectedRegion, onNavigateToChat }: 
                 a.download = `climate-decision-${selectedScenario.id}.json`;
                 a.click();
               }}
-              className="w-full py-2.5 px-4 rounded-lg bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-200 text-xs sm:text-sm border border-slate-800 transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-lg bg-notion-bg hover:bg-notion-hover text-notion-secondary hover:text-notion-text text-xs sm:text-sm border border-notion-border transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export Record (JSON)</span>
